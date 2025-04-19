@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,80 @@
 
 .read-the-docs {
   color: #888;
+} */
+
+.main {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.input__form form {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 30px;
+}
+
+.input__form-task__new {
+  width: 200px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.input__form-task__new:required:valid {
+  width: 200px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.input__form-task__new:focus{
+  outline: none;
+}
+
+.input__form-task__new:invalid:focus {
+  border-color: red;
+}
+
+.input__form-task__add {
+  width: 90px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: #6699ff;
+  color: white;
+  border: none;
+}
+
+.filter {
+  display: flex;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+.filter-btn{
+  cursor: pointer;
+  color: rgb(93, 93, 93);
+  background-color: none;
+  border: none;
+}
+
+.filter-btn__active {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #6699ff;
+  outline: none;
+}
+
+.task__list {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

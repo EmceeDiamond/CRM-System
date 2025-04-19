@@ -1,0 +1,106 @@
+.task {
+    display: flex;
+    width: 100%;
+    height: 30px;
+}
+
+.editing__mode{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.editing__mode-txt {
+    display: flex;
+    align-items: center;
+}
+
+.editing__mode-btn {
+    display: flex;
+    gap: 9px;
+}
+
+.normal__mode {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.normal__mode-txt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.normal__mode-btn {
+    display: flex;
+    gap: 12px;
+}
+
+.edit-task {
+    background-image: url("../img/image.png");
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+.delete-task {
+    background-image: url("../img/icons8-удалить-26.png");
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+.break-change__task {
+    background-image: url("../img/icons8-отменить-26.png");
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+.save-change__task {
+    background-image: url("../img/icons8-сохранить-26.png");
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+.style__label-checkbox {
+    position: relative;
+    padding-left: 30px;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    color: #000;
+    cursor: pointer;
+    user-select: none;
+}
+
+.style__label-checkbox::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.4em;
+    height: 1.4em;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+.style__input-checkbox {
+    display: none;
+}
+
+.style__input-checkbox:checked + .style__label-checkbox::before {
+    border-color: #00b50e;
+    background-image: url('../img/icons8-галочка-26.png');
+    background-size: contain;
+}
