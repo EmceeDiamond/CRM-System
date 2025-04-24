@@ -1,4 +1,4 @@
-import { Todo } from "../../Interface/Interfase"
+import { Todo } from "../../Types/Interfase"
 import { fetchDelete, fetchPut } from "../../API/fetch"
 import './Task.css'
 import React, { useState } from "react"

@@ -1,63 +1,70 @@
-import { MetaResponse, Todo, TodoInfo } from "../Interface/Interfase"
+import { MetaResponse, Todo, TodoInfo } from "../Types/Interfase"
 
-const fetchGet = async(): Promise <MetaResponse<Todo, TodoInfo>> => {
-    return await fetch(`https://easydev.club/api/v1/todos`).then((response) => {
-        if (!response.ok) {
-            throw new Error ()
-        }
-        return response.json()
-    })
-    .then(data => data)
-    .catch((error) => console.log(error))
+const fetchGet = async() => {
+    try {
+        const response = await fetch(`https://easydev.club/api/v1/todos`);
+        const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.json();
+        return data
+    }
+    catch {
+        console.error('Failed Get Request')
+    }
+    
 }
 
 const fetchPost = async (isDone: boolean, title: string) => {
-    console.log(isDone, title)
-    await fetch(`https://easydev.club/api/v1/todos`, {
-        method: 'POST',
-		headers: {
-			'content-type': 'application/json;charset=UTF-8',
-		},
-		body: JSON.stringify({
-			isDone: isDone,
-			title: title,
-		}),
-    }).then((response) => {
-        if (!response.ok) {
+    try {
+        const response = await fetch(`https://easydev.club/api/v1/todos`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify({
+                isDone: isDone,
+                title: title,
+            }),
+        })
+        if (!response.ok){
             throw new Error ()
         }
-    })
-    .catch((error) => console.log(error))
+    }
+    catch {
+        console.error('Failed Post Request');
+    }
 }
 
 const fetchDelete = async (id: number)=> {
-    await fetch(`https://easydev.club/api/v1/todos/${id}`, { method: 'DELETE' })
-    .then((response) => {
-        console.log("fetcheDel")
+    try {
+        const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, { method: 'DELETE' })
         if (!response.ok) {
             throw new Error ()
         }
-    })
-    .catch((error) => console.log(error))
+    }
+    catch {
+        console.error('Failed Delet Request')
+    }
 }
 
 const fetchPut = async (isDone: boolean, title: string, id: number) => {
-    console.log(isDone, title, id)
-    await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-        method: 'PUT',
-		headers: {
-			'content-type': 'application/json;charset=UTF-8',
-		},
-		body: JSON.stringify({
-			isDone: isDone,
-			title: title,
-		}),
-    }).then((response) => {
+    try {
+        const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify({
+                isDone: isDone,
+                title: title,
+            }),
+        })
         if (!response.ok) {
             throw new Error ()
         }
-    })
-    .catch((error) => console.log(error))
+        
+    }
+    catch {
+        console.error('Failed Put Request')
+    }
 }
 
 export {fetchGet, fetchPost, fetchDelete, fetchPut}
