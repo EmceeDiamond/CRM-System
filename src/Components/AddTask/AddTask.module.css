@@ -1,0 +1,27 @@
+.addTask {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+.addTask__input {
+    width: 200px;
+    height: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+
+.addTask__input:focus{
+    outline: none;
+}
+
+.addTask__btn {
+    width: 90px;
+    height: 30px;
+    border-radius: 6px;
+    background-color: rgba(102, 153, 255, 1);
+    color: rgba(255, 255, 255, 1);;
+    border: none;
+}

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { fetchPost } from "../../API/fetch";
-import './AddTask.css'
+import { postTodo } from "../../API/fetch";
+import styles from './AddTask.module.css'
 
 type PropsAddTask = {
     getData: () => void
@@ -17,10 +17,10 @@ const AddTask = (props: PropsAddTask) => {
     const addTask = (e: React.FormEvent) => {
         e.preventDefault()
         if (inputData.length < 2 || inputData.length > 64){
-            alert("ХХХ")
+            alert(`Длинна текста должна быть от 2 до 64 символов. Длинна вашего текста: ${inputData .length}`)
         }
         else {
-            fetchPost(false, inputData).then(() => {
+            postTodo(false, inputData).then(() => {
                 props.getData()
             })
         }
@@ -28,20 +28,16 @@ const AddTask = (props: PropsAddTask) => {
     }
 
     return (
-        <div className="input__form">
-            <form action="" onSubmit={(e: React.FormEvent) => addTask(e)}>
+        <form action="" onSubmit={addTask} className={styles.addTask}>
             <input 
                 type="text" 
                 value={inputData}
                 required 
-                minLength={2} 
-                maxLength={64} 
-                className='input__form-task__new' 
+                className={styles.addTask__input}
                 placeholder='Task To Be Done...' 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInput(e)} />
-            <button className='input__form-task__add' onClick={(e: React.FormEvent) => addTask(e)}>Add</button>
-            </form>
-        </div>
+                onChange={handleInput} /> 
+            <button className={styles.addTask__btn}>Add</button>
+        </form>
     )
 }
 

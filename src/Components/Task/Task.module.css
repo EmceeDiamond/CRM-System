@@ -1,82 +1,74 @@
 .task {
     display: flex;
     width: 100%;
+}
+
+.editingMode{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.editingMode__txt {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.editingMode__btn {
+    display: flex;
+    gap: 10px;
+    padding-left: 10px;
+}
+
+.normalMode {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.normalMode__txt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.normalMode__btn {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.btn {
+    background-position: center;
+    background-size: cover;
+    width: 30px;
     height: 30px;
+    border: none;
+    background-color: rgba(255, 255, 255, 1);
 }
 
-.editing__mode{
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
-
-.editing__mode-txt {
-    display: flex;
-    align-items: center;
-}
-
-.editing__mode-btn {
-    display: flex;
-    gap: 9px;
-}
-
-.normal__mode {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
-
-.normal__mode-txt {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.normal__mode-btn {
-    display: flex;
-    gap: 12px;
-}
-
-.edit-task {
+.btnEdit {
     background-image: url("../img/image.png");
-    background-position: center;
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border: none;
 }
 
-.delete-task {
+.btnDelete {
     background-image: url("../img/icons8-удалить-26.png");
-    background-position: center;
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border: none;
 }
 
-.break-change__task {
+.btnBreakEdit {
     background-image: url("../img/icons8-отменить-26.png");
-    background-position: center;
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border: none;
 }
 
-.save-change__task {
+.btnSaveEdit {
     background-image: url("../img/icons8-сохранить-26.png");
-    background-position: center;
-    background-size: cover;
-    width: 30px;
-    height: 30px;
-    border: none;
 }
 
-.style__label-checkbox {
+.checkboxLabel {
     position: relative;
     padding-left: 30px;
-    height: 1.5em;
+    height: 20px;
     display: flex;
     align-items: center;
     color: #000;
@@ -84,23 +76,28 @@
     user-select: none;
 }
 
-.style__label-checkbox::before {
+.checkboxLabel::before {
     content: '';
     position: absolute;
     left: 0;
     top: 0;
-    width: 1.4em;
-    height: 1.4em;
+    width: 22px;
+    height: 22px;
     border-radius: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(204, 204, 204, 1);;
 }
 
-.style__input-checkbox {
+.checkbox {
     display: none;
 }
 
-.style__input-checkbox:checked + .style__label-checkbox::before {
-    border-color: #00b50e;
+.checkbox:checked + .checkboxLabel::before {
+    border-color: rgba(0, 181, 14, 1);;
     background-image: url('../img/icons8-галочка-26.png');
     background-size: contain;
+}
+
+.editingMode__txt__input {
+    border-radius: 5px;
+    max-width: 220px;
 }

@@ -1,31 +1,41 @@
 import  { useState, useEffect } from 'react'
 import { Todo, TodoInfo, MetaResponse } from '../Types/Interfase'
-import './TodoListPage.css'
-import { fetchGet } from '../API/fetch'
-//import {Task} from '../Components/Task/Task'
+import styles from './TodoListPage.module.css'
+import { getTodosData } from '../API/fetch'
 import TaskList from '../Components/TaskList/TaskList'
 import Filter from '../Components/Filter/Filter'
 import AddTask from '../Components/AddTask/AddTask'
+import { filterStatus } from '../API/fetch'
 
 function TodoListPage() {
-    const [tasksList, setTasksList] = useState<Todo[] | undefined>([])
-    const [taskStatus, setTaskStatus] = useState<TodoInfo>()
-    const [completionStatus, setCompletionStatus] = useState("All");
+    const [tasksList, setTasksList] = useState<Todo[]>([])
+    const [taskStatus, setTaskStatus] = useState<TodoInfo>({ 
+        all: 0,
+        completed: 0,
+        inWork: 0,
+    })
+    const [completionStatus, setCompletionStatus] = useState<filterStatus>(filterStatus.all);
 
-    const getData = () => {
-        fetchGet().then((data: MetaResponse<Todo, TodoInfo> | undefined)  => {
-        setTasksList(data?.data)
-        setTaskStatus(data?.info)
-        })
+    const getData = async(completionStatus: filterStatus) => {
+        try {
+            const todosData: MetaResponse<Todo, TodoInfo> = await getTodosData(completionStatus);
+            setTasksList(todosData.data);
+            if (todosData.info !== undefined) {
+                setTaskStatus(todosData.info);
+            }
+            
+        } catch(err) {
+            console.error(err)
+        }
     }
 
     useEffect(() => {
-        getData()
-    }, []);
+        getData(completionStatus)
+    }, [completionStatus]);
 
     return (
-    <div className="main">
-        <AddTask getData={getData}/>
+    <div className={styles.main}>
+        <AddTask getData={() => getData(completionStatus)}/>
         <Filter 
             completionStatus={completionStatus} 
             setCompletionStatus={setCompletionStatus} 
@@ -33,7 +43,7 @@ function TodoListPage() {
         />
         <TaskList 
             tasksList={tasksList}
-            getData={getData}
+            getData={() => getData(completionStatus)}
             completionStatus={completionStatus}
         />
     </div>

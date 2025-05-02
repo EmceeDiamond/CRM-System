@@ -1,20 +1,29 @@
-import { MetaResponse, Todo, TodoInfo } from "../Types/Interfase"
+import { MetaResponse, Todo, TodoInfo, TodoRequest } from "../Types/Interfase"
 
-const fetchGet = async() => {
+const BASE_URL = 'https://easydev.club/api/v1'
+
+export enum filterStatus {
+    all = 'all',
+    completed = 'completed',
+    inWork = 'inWork'
+}
+
+const getTodosData = async(filter: filterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
-        const response = await fetch(`https://easydev.club/api/v1/todos`);
+        const response = await fetch(`${BASE_URL}/todos?filter=${filter}`);
         const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.json();
-        return data
+        return data;
     }
-    catch {
-        console.error('Failed Get Request')
+    catch(err) {
+        console.error(err)
+        throw(err);
     }
     
 }
 
-const fetchPost = async (isDone: boolean, title: string) => {
+const postTodo = async (isDone: boolean, title: string) => {
     try {
-        const response = await fetch(`https://easydev.club/api/v1/todos`, {
+        const response = await fetch(`${BASE_URL}/todos`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
@@ -33,9 +42,9 @@ const fetchPost = async (isDone: boolean, title: string) => {
     }
 }
 
-const fetchDelete = async (id: number)=> {
+const deleteTodo = async (id: number)=> {
     try {
-        const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, { method: 'DELETE' })
+        const response = await fetch(`${BASE_URL}/todos/${id}`, { method: 'DELETE' })
         if (!response.ok) {
             throw new Error ()
         }
@@ -45,16 +54,16 @@ const fetchDelete = async (id: number)=> {
     }
 }
 
-const fetchPut = async (isDone: boolean, title: string, id: number) => {
+const putTodo = async (todo: TodoRequest) => {
     try {
-        const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+        const response = await fetch(`${BASE_URL}/todos/${todo.id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
             },
             body: JSON.stringify({
-                isDone: isDone,
-                title: title,
+                isDone: todo.isDone,
+                title: todo.title,
             }),
         })
         if (!response.ok) {
@@ -67,4 +76,4 @@ const fetchPut = async (isDone: boolean, title: string, id: number) => {
     }
 }
 
-export {fetchGet, fetchPost, fetchDelete, fetchPut}
+export {getTodosData, postTodo, deleteTodo, putTodo}

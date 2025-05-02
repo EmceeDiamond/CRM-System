@@ -1,9 +1,9 @@
 import { Todo } from "../../Types/Interfase"
 import { Task } from "../Task/Task"
-import './TaskList.css'
+import styles from './TaskList.module.css'
 
 type PropsTaskList = {
-    tasksList: Todo[] | undefined,
+    tasksList: Todo[],
     getData: () => void,
     completionStatus: string
 }
@@ -11,16 +11,13 @@ type PropsTaskList = {
 const TaskList = (props: PropsTaskList) => {
 
     return (
-        <div className="task__list">
-            {props.tasksList?.map((item: Todo) => {
-            if (props.completionStatus === "All") {
-                return <Task task={item} updateState={props.getData}/>
-            }
-            else if (item.isDone === JSON.parse(props.completionStatus)) {
-                return <Task task={item} updateState={props.getData}/>
-            } 
+        <ul className={styles.task__list}>
+            {props.tasksList.map((item: Todo) => {
+                return  <li className={styles.task}>
+                            <Task task={item} updateState={props.getData}/>
+                        </li>
             })}
-        </div>
+        </ul>
     )
 }
 

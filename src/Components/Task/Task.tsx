@@ -1,6 +1,6 @@
-import { Todo } from "../../Types/Interfase"
-import { fetchDelete, fetchPut } from "../../API/fetch"
-import './Task.css'
+import { Todo, TodoRequest } from "../../Types/Interfase"
+import { deleteTodo, putTodo } from "../../API/fetch"
+import styles from './Task.module.css'
 import React, { useState } from "react"
 
 type Props = {
@@ -9,32 +9,60 @@ type Props = {
 }
 const Task = (props: Props) => {
 
-    const [flag, setFlag] = useState(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const [inputData, setInputData] = useState<string>(props.task.title);
     
-    const deleteTask = (id: number) => {
-        fetchDelete(id).then(() => {
-            console.log("del")
-            props.updateState()
-        })
+    const handleDeleteTask = async(id: number, e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            await deleteTodo(id);
+            props.updateState();
+        } catch(err) {
+            console.error(err)
+        }
     }
 
-    const saveChanges = () => {
-        fetchPut(props.task.isDone, inputData, props.task.id).then(() =>
-            props.updateState()
-        )
-        setFlag(false)
+    const handleStartEdit = (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsEdit(true)
     }
 
-    const changeStatus = () => {
-        fetchPut(!props.task.isDone, inputData, props.task.id).then(() =>
+    const handleSaveChanges = async(e: React.FormEvent) => {
+        e.preventDefault()
+        const todo: TodoRequest = {
+            isDone: props.task.isDone,
+            title: inputData,
+            id: props.task.id
+        }
+        try {
+            await putTodo(todo)
             props.updateState()
-        )
+        } catch(err) {
+            console.error(err)
+        }
+        setIsEdit(false)
     }
 
-    const undoChanges = () => {
+    const handleChangeStatus = async() => {
+
+        console.log("Zapusk")
+        const todo: TodoRequest = {
+            isDone: !props.task.isDone,
+            title: inputData,
+            id: props.task.id
+        }
+        try {
+            await putTodo(todo);
+            props.updateState()
+        } catch(err) {
+            console.error(err)
+        }
+    }
+
+    const handleUndoChanges = (e: React.FormEvent) => {
+        e.preventDefault()
         setInputData(props.task.title)
-        setFlag(false)
+        setIsEdit(false)
     }
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,31 +70,69 @@ const Task = (props: Props) => {
     }
 
     return (
-        <div className="task">
-            {flag ? 
-                <div className="editing__mode">
-                    <div className="editing__mode-txt">
-                        <input type="checkbox" id={"checkbox-edit"+`${props.task.id}`} className="style__input-checkbox" checked={props.task.isDone} onChange={() => changeStatus()}/>
-                        <label htmlFor={"checkbox-edit"+`${props.task.id}`} className="style__label-checkbox"></label>
-                        <input defaultValue={props.task.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInput(e)} className="editing__mode-txt__input" style={{width: (props.task.title.length + 2) * 8}}/>
+        <div className={styles.task} style={{height: (inputData.length < 26 ? 30 : inputData.length < 53 ? 50 : 70)}}>
+            {isEdit ? 
+                <div className={styles.editingMode}>
+                    <div >
+                        <form id="editingMode__form" className={styles.editingMode__txt}>
+                            <input 
+                                type="checkbox" 
+                                id={"checkboxEdit"+`${props.task.id}`} 
+                                className={styles.checkbox} 
+                                checked={props.task.isDone} 
+                                onChange={handleChangeStatus}/>
+                            <label 
+                                htmlFor={"checkboxEdit"+`${props.task.id}`} 
+                                className={styles.checkboxLabel}></label>
+                            <input 
+                                defaultValue={props.task.title} 
+                                onChange={handleInput} 
+                                className={styles.editingMode__txt__input} 
+                                style={{width: (props.task.title.length + 2) * 8}}/>
+                        </form>
+                        
                     </div>
-                    <div className="editing__mode-btn">
-                        <button onClick={() => saveChanges()} className="save-change__task"></button>
-                        <button onClick={() => undoChanges()} className="break-change__task"></button>
-                        <button onClick={() => deleteTask(props.task.id)} className="delete-task"></button>
+                    <div className={styles.editingMode__btn}>
+                        <button 
+                            form="editingMode__form" 
+                            onClick={handleSaveChanges} 
+                            className={`${styles.btn} ${styles.btnSaveEdit}`}></button>
+                        <button 
+                            form="editingMode__form" 
+                            onClick={handleUndoChanges} 
+                            className={`${styles.btn} ${styles.btnBreakEdit}`}></button>
+                        <button 
+                            form="editingMode__form" 
+                            onClick={(e) => handleDeleteTask(props.task.id, e)} 
+                            className={`${styles.btn} ${styles.btnDelete}`}></button>
                     </div>
                     
                 </div>    
                 :
-                <div className="normal__mode">
-                    <div className="normal__mode-txt">
-                        <input type="checkbox" id={"checkbox-normal"+`${props.task.id}`} className="style__input-checkbox" checked={props.task.isDone} onChange={() => changeStatus()}/>
-                        <label htmlFor={"checkbox-normal"+`${props.task.id}`} className="style__label-checkbox"></label>
+                <div className={styles.normalMode}>
+                    <div className={styles.normalMode__txt}>
+                        <form id="normalMode__form">
+                            <input 
+                                type="checkbox" 
+                                id={"checkboxNormal"+`${props.task.id}`} 
+                                className={styles.checkbox} 
+                                checked={props.task.isDone} 
+                                onChange={handleChangeStatus}/>
+                            <label 
+                                htmlFor={"checkboxNormal"+`${props.task.id}`} 
+                                className={styles.checkboxLabel}></label>
+                        </form>
                         <p>{props.task.title}</p>
                     </div>
-                    <div className="normal__mode-btn">
-                        <button onClick={() => setFlag(true)} className="edit-task"></button>   
-                        <button onClick={() => deleteTask(props.task.id)} className="delete-task"></button>
+                    <div className={styles.normalMode__btn}>
+                        <button 
+                            form="normalMode__form" 
+                            onClick={handleStartEdit} 
+                            className={`${styles.btn} ${styles.btnEdit}`}></button>   
+                        <button 
+                            form="normalMode__form" 
+                            onClick={(e) => handleDeleteTask(props.task.id, e)} 
+                            className={`${styles.btn} ${styles.btnDelete}`}></button>
                     </div>
                 </div>
             }
