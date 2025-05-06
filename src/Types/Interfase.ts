@@ -25,3 +25,9 @@ export interface MetaResponse<T, N> {
 		totalAmount: number
 	}
 }
+
+export enum FilterStatus {
+    all = 'all',
+    completed = 'completed',
+    inWork = 'inWork'
+}

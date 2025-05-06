@@ -1,14 +1,8 @@
-import { MetaResponse, Todo, TodoInfo, TodoRequest } from "../Types/Interfase"
+import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
 
 const BASE_URL = 'https://easydev.club/api/v1'
 
-export enum filterStatus {
-    all = 'all',
-    completed = 'completed',
-    inWork = 'inWork'
-}
-
-const getTodosData = async(filter: filterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
+const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
         const response = await fetch(`${BASE_URL}/todos?filter=${filter}`);
         const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.json();

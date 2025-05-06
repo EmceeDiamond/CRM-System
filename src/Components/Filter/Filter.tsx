@@ -1,31 +1,31 @@
 import React from "react"
 import { TodoInfo } from "../../Types/Interfase"
 import styles from './Filter.module.css'
-import { filterStatus } from "../../API/fetch"
+import { FilterStatus } from "../../Types/Interfase"
 
 type PropsFilter = {
-    completionStatus: filterStatus, 
+    completionStatus: FilterStatus, 
     taskStatus?: TodoInfo,
-    setCompletionStatus: React.Dispatch<React.SetStateAction<filterStatus>>
+    setCompletionStatus: React.Dispatch<React.SetStateAction<FilterStatus>>
 }
 
 const Filter = (props: PropsFilter) => {
     return (
         <div className={styles.filter}>
             <button 
-                className={props.completionStatus === filterStatus.all ? `${styles.filter__btn} ${styles.btn__active}` : styles.filter__btn} 
-                onClick={() => props.setCompletionStatus(filterStatus.all)} 
+                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.all ? styles.btn__active : ''}`} 
+                onClick={() => props.setCompletionStatus(FilterStatus.all)} 
                 autoFocus>
                 Все({props.taskStatus?.all})
             </button>
             <button 
-                className={props.completionStatus === filterStatus.inWork ? `${styles.filter__btn} ${styles.btn__active}` : styles.filter__btn} 
-                onClick={() => props.setCompletionStatus(filterStatus.inWork)}>
+                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.inWork ? styles.btn__active : ''}`} 
+                onClick={() => props.setCompletionStatus(FilterStatus.inWork)}>
                 В прогрессе({props.taskStatus?.inWork})
             </button>
             <button 
-                className={props.completionStatus === filterStatus.completed ? `${styles.filter__btn} ${styles.btn__active}` : styles.filter__btn}
-                onClick={() => props.setCompletionStatus(filterStatus.completed)}>
+                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.completed ? styles.btn__active : ''}`} 
+                onClick={() => props.setCompletionStatus(FilterStatus.completed)}>
                 Завершенные({props.taskStatus?.completed})
             </button>
         </div>

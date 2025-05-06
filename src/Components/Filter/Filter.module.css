@@ -6,14 +6,14 @@
 
 .filter__btn{
     cursor: pointer;
-    color: rgba(93, 93, 93, 1);
-    background-color: rgba(255, 255, 255, 1);
+    color: rgb(93, 93, 93);
+    background-color: rgb(255, 255, 255);
     border: none;
 }
 
 .btn__active {
     cursor: pointer;
     text-decoration: underline;
-    color: rgba(102, 153, 255, 1);;
+    color: rgb(102, 153, 255);;
     outline: none;
 }

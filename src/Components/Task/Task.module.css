@@ -46,7 +46,7 @@
     width: 30px;
     height: 30px;
     border: none;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgb(255, 255, 255);
 }
 
 .btnEdit {
@@ -84,7 +84,7 @@
     width: 22px;
     height: 22px;
     border-radius: 20px;
-    border: 1px solid rgba(204, 204, 204, 1);;
+    border: 1px solid rgb(204, 204, 204);;
 }
 
 .checkbox {
@@ -92,7 +92,7 @@
 }
 
 .checkbox:checked + .checkboxLabel::before {
-    border-color: rgba(0, 181, 14, 1);;
+    border-color: rgb(0, 181, 14);;
     background-image: url('../img/icons8-галочка-26.png');
     background-size: contain;
 }

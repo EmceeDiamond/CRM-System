@@ -12,8 +12,7 @@ const Task = (props: Props) => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [inputData, setInputData] = useState<string>(props.task.title);
     
-    const handleDeleteTask = async(id: number, e: React.FormEvent) => {
-        e.preventDefault()
+    const handleDeleteTask = async(id: number) => {
         try {
             await deleteTodo(id);
             props.updateState();
@@ -22,13 +21,11 @@ const Task = (props: Props) => {
         }
     }
 
-    const handleStartEdit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleStartEdit = () => {
         setIsEdit(true)
     }
 
-    const handleSaveChanges = async(e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSaveChanges = async() => {
         const todo: TodoRequest = {
             isDone: props.task.isDone,
             title: inputData,
@@ -44,8 +41,6 @@ const Task = (props: Props) => {
     }
 
     const handleChangeStatus = async() => {
-
-        console.log("Zapusk")
         const todo: TodoRequest = {
             isDone: !props.task.isDone,
             title: inputData,
@@ -59,8 +54,7 @@ const Task = (props: Props) => {
         }
     }
 
-    const handleUndoChanges = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleUndoChanges = () => {
         setInputData(props.task.title)
         setIsEdit(false)
     }
@@ -94,16 +88,19 @@ const Task = (props: Props) => {
                     </div>
                     <div className={styles.editingMode__btn}>
                         <button 
+                            type="button"
                             form="editingMode__form" 
                             onClick={handleSaveChanges} 
                             className={`${styles.btn} ${styles.btnSaveEdit}`}></button>
                         <button 
+                            type="button"
                             form="editingMode__form" 
                             onClick={handleUndoChanges} 
                             className={`${styles.btn} ${styles.btnBreakEdit}`}></button>
                         <button 
+                            type="button"
                             form="editingMode__form" 
-                            onClick={(e) => handleDeleteTask(props.task.id, e)} 
+                            onClick={() => handleDeleteTask(props.task.id)} 
                             className={`${styles.btn} ${styles.btnDelete}`}></button>
                     </div>
                     
@@ -126,12 +123,14 @@ const Task = (props: Props) => {
                     </div>
                     <div className={styles.normalMode__btn}>
                         <button 
+                            type="button"
                             form="normalMode__form" 
                             onClick={handleStartEdit} 
                             className={`${styles.btn} ${styles.btnEdit}`}></button>   
                         <button 
+                            type="button"
                             form="normalMode__form" 
-                            onClick={(e) => handleDeleteTask(props.task.id, e)} 
+                            onClick={() => handleDeleteTask(props.task.id)} 
                             className={`${styles.btn} ${styles.btnDelete}`}></button>
                     </div>
                 </div>

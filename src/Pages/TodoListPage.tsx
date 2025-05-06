@@ -5,7 +5,7 @@ import { getTodosData } from '../API/fetch'
 import TaskList from '../Components/TaskList/TaskList'
 import Filter from '../Components/Filter/Filter'
 import AddTask from '../Components/AddTask/AddTask'
-import { filterStatus } from '../API/fetch'
+import { FilterStatus } from '.././Types/Interfase'
 
 function TodoListPage() {
     const [tasksList, setTasksList] = useState<Todo[]>([])
@@ -14,9 +14,9 @@ function TodoListPage() {
         completed: 0,
         inWork: 0,
     })
-    const [completionStatus, setCompletionStatus] = useState<filterStatus>(filterStatus.all);
+    const [completionStatus, setCompletionStatus] = useState<FilterStatus>(FilterStatus.all);
 
-    const getData = async(completionStatus: filterStatus) => {
+    const getData = async(completionStatus: FilterStatus) => {
         try {
             const todosData: MetaResponse<Todo, TodoInfo> = await getTodosData(completionStatus);
             setTasksList(todosData.data);
