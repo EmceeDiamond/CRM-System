@@ -1,0 +1,19 @@
+.filter {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 20px;
+}
+
+.filter__btn{
+    cursor: pointer;
+    color: rgb(93, 93, 93);
+    background-color: rgb(255, 255, 255);
+    border: none;
+}
+
+.btn__active {
+    cursor: pointer;
+    text-decoration: underline;
+    color: rgb(102, 153, 255);;
+    outline: none;
+}
