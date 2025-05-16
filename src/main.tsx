@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')!).render(
       <LayoutComponent>
         <Routes>
           <Route path="/profile" element={<ProfilePage />}/>
-          <Route path="/todo-list" element={<TodoListPage />}/>
+          <Route path="*" element={<TodoListPage />}/>
         </Routes>
       </LayoutComponent>
     </BrowserRouter>
