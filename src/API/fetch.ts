@@ -1,11 +1,12 @@
 import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
+import axios from 'axios'
 
 const BASE_URL = 'https://easydev.club/api/v1'
 
 const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
-        const response = await fetch(`${BASE_URL}/todos?filter=${filter}`);
-        const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.json();
+        const response = await axios.get(`${BASE_URL}/todos?filter=${filter}`);
+        const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.data;
         return data;
     }
     catch(err) {
@@ -15,19 +16,14 @@ const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, To
     
 }
 
-const postTodo = async (isDone: boolean, title: string) => {
+const postTodo = async (title: string) => {
+    const postData = {
+        isDone: false,
+        title: title
+    }
     try {
-        const response = await fetch(`${BASE_URL}/todos`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify({
-                isDone: isDone,
-                title: title,
-            }),
-        })
-        if (!response.ok){
+        const response = await axios.post(`${BASE_URL}/todos`, postData)
+        if (!response){
             throw new Error ()
         }
     }
@@ -38,8 +34,8 @@ const postTodo = async (isDone: boolean, title: string) => {
 
 const deleteTodo = async (id: number)=> {
     try {
-        const response = await fetch(`${BASE_URL}/todos/${id}`, { method: 'DELETE' })
-        if (!response.ok) {
+        const response = await axios.delete(`${BASE_URL}/todos/${id}`, { method: 'DELETE' })
+        if (!response) {
             throw new Error ()
         }
     }
@@ -50,17 +46,8 @@ const deleteTodo = async (id: number)=> {
 
 const putTodo = async (todo: TodoRequest) => {
     try {
-        const response = await fetch(`${BASE_URL}/todos/${todo.id}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify({
-                isDone: todo.isDone,
-                title: todo.title,
-            }),
-        })
-        if (!response.ok) {
+        const response = await axios.put(`${BASE_URL}/todos/${todo.id}`, todo)
+        if (!response) {
             throw new Error ()
         }
         

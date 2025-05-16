@@ -1,42 +1,35 @@
-.task {
-    display: flex;
-    width: 100%;
-}
-
 .editingMode{
-    display: flex;
     width: 100%;
     justify-content: space-between;
 }
 
 .editingMode__txt {
-    display: flex;
     align-items: center;
     box-sizing: border-box;
+    gap: 30px;
 }
 
 .editingMode__btn {
-    display: flex;
     gap: 10px;
     padding-left: 10px;
 }
 
 .normalMode {
-    display: flex;
     width: 100%;
     justify-content: space-between;
 }
 
 .normalMode__txt {
-    display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 30px;
+}
+
+.formItem {
+    margin: 0;
 }
 
 .normalMode__btn {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+    gap: 20px;
     padding-left: 10px;
 }
 
@@ -46,55 +39,24 @@
     width: 30px;
     height: 30px;
     border: none;
-    background-color: rgb(255, 255, 255);
+    background-color: white;
+
 }
 
 .btnEdit {
     background-image: url("../img/image.png");
 }
 
-.btnDelete {
+.btnDelete, .btnDelete:hover {
     background-image: url("../img/icons8-удалить-26.png");
 }
 
-.btnBreakEdit {
+.btnBreakEdit, .btnBreakEdit:hover {
     background-image: url("../img/icons8-отменить-26.png");
 }
 
-.btnSaveEdit {
-    background-image: url("../img/icons8-сохранить-26.png");
-}
-
-.checkboxLabel {
-    position: relative;
-    padding-left: 30px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    color: #000;
-    cursor: pointer;
-    user-select: none;
-}
-
-.checkboxLabel::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 20px;
-    border: 1px solid rgb(204, 204, 204);;
-}
-
-.checkbox {
-    display: none;
-}
-
-.checkbox:checked + .checkboxLabel::before {
-    border-color: rgb(0, 181, 14);;
-    background-image: url('../img/icons8-галочка-26.png');
-    background-size: contain;
+.btnSaveEdit, .btnSaveEdit:hover {
+    background-image: url("../img/icons8-сохранить-26.png") ;
 }
 
 .editingMode__txt__input {

@@ -1,5 +1,6 @@
 .task__list {
-    width: 300px;
+    box-sizing: border-box;
+    width: 400px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -7,4 +8,7 @@
 
 .task {
     list-style: none;
+    width: 100%;
+    display: block;
+    border-block-end: none;
 }
