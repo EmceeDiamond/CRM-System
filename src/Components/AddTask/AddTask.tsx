@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { postTodo } from "../../API/fetch";
+import { postTodo } from "../../API/api";
 import styles from './AddTask.module.css'
 import { Button, Form, Input, Flex } from 'antd';
 

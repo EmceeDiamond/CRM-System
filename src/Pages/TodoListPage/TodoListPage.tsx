@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react'
 import { Todo, TodoInfo, MetaResponse } from '../../Types/Interfase'
 import styles from './TodoListPage.module.css'
-import { getTodosData } from '../../API/fetch'
+import { getTodosData } from '../../API/api'
 import TaskList from '../../Components/TaskList/TaskList'
 import Filter from '../../Components/Filter/Filter'
 import AddTask from '../../Components/AddTask/AddTask'

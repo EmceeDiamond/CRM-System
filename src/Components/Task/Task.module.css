@@ -39,24 +39,8 @@
     width: 30px;
     height: 30px;
     border: none;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
 
-}
-
-.btnEdit {
-    background-image: url("../img/image.png");
-}
-
-.btnDelete, .btnDelete:hover {
-    background-image: url("../img/icons8-удалить-26.png");
-}
-
-.btnBreakEdit, .btnBreakEdit:hover {
-    background-image: url("../img/icons8-отменить-26.png");
-}
-
-.btnSaveEdit, .btnSaveEdit:hover {
-    background-image: url("../img/icons8-сохранить-26.png") ;
 }
 
 .editingMode__txt__input {

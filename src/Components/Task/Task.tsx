@@ -1,5 +1,5 @@
 import { Todo, TodoRequest } from "../../Types/Interfase"
-import { deleteTodo, putTodo } from "../../API/fetch"
+import { deleteTodo, putTodo } from "../../API/api"
 import styles from './Task.module.css'
 import React, { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
@@ -72,7 +72,7 @@ const Task = (props: Props) => {
         <Flex style={{height: (inputData.length < 26 ? 30 : inputData.length < 53 ? 50 : 70)}}>
             {isEdit ? 
                 <Flex className={styles.editingMode}> 
-                    <Form id="editingMode__form">
+                    <Form id="editingMode__form" onFinish={handleSaveChanges} onReset={handleUndoChanges}>
                         <Flex className={styles.editingMode__txt}>
                             <Form.Item className={styles.formItem}>
                                 <Checkbox 
@@ -80,7 +80,27 @@ const Task = (props: Props) => {
                                     onChange={handleChangeStatus}
                                 />
                             </Form.Item> 
-                            <Form.Item className={styles.formItem}>
+                            <Form.Item 
+                                name="edit-task" 
+                                label="" 
+                                className={styles.formItem}
+                                rules={[
+                                    {
+                                        required: true
+                                    },
+                                    { 
+                                        whitespace: true,
+                                        message: "Ввод пустых сиволов запрещен"
+                                    },
+                                    { 
+                                        min: 2,
+                                        message: "Минимальная длинна текста 2 символа"
+                                    },
+                                    { 
+                                        max: 64,
+                                        message: "Максимальная длинна текста 64 символа"
+                                    }
+                                ]}>
                                 <Input
                                     defaultValue={props.task.title} 
                                     onChange={handleInput} 
@@ -92,17 +112,15 @@ const Task = (props: Props) => {
                     </Form>
                     <Flex className={styles.editingMode__btn}>
                         <Button 
-                            htmlType="button"
+                            htmlType="submit"
                             form="editingMode__form" 
-                            onClick={handleSaveChanges} 
                             icon={<SaveOutlined />}
                             style={{fontSize: '150%', color:"green"}}
                             className={`${styles.btn}`}                        
                         />
                         <Button 
-                            htmlType="button"
+                            htmlType="reset"
                             form="editingMode__form" 
-                            onClick={handleUndoChanges}
                             icon={<UndoOutlined />} 
                             style={{fontSize: '150%', color:"red"}}
                             className={`${styles.btn}`}

@@ -1,11 +1,15 @@
 import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
-import axios from 'axios'
-
-const BASE_URL = 'https://easydev.club/api/v1'
+import instance from "./apiInstance"
 
 const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
-        const response = await axios.get(`${BASE_URL}/todos?filter=${filter}`);
+        const response = await instance({
+            url: `todos`,
+            params: {
+                filter: `${filter}`
+            },
+            method: 'GET'
+        })
         const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.data;
         return data;
     }
@@ -22,7 +26,11 @@ const postTodo = async (title: string) => {
         title: title
     }
     try {
-        const response = await axios.post(`${BASE_URL}/todos`, postData)
+        const response = await instance({
+            url: 'todos',
+            method: 'POST',
+            data: postData,
+        })
         if (!response){
             throw new Error ()
         }
@@ -34,7 +42,10 @@ const postTodo = async (title: string) => {
 
 const deleteTodo = async (id: number)=> {
     try {
-        const response = await axios.delete(`${BASE_URL}/todos/${id}`, { method: 'DELETE' })
+        const response = await instance({
+            url: `/todos/${id}`,
+            method: 'DELETE'
+        })
         if (!response) {
             throw new Error ()
         }
@@ -46,7 +57,11 @@ const deleteTodo = async (id: number)=> {
 
 const putTodo = async (todo: TodoRequest) => {
     try {
-        const response = await axios.put(`${BASE_URL}/todos/${todo.id}`, todo)
+        const response = await instance({
+            url: `todos/${todo.id}`,
+            method: 'PUT',
+            data: todo
+        })
         if (!response) {
             throw new Error ()
         }
