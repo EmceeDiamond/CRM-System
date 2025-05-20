@@ -2,6 +2,7 @@ import React from "react"
 import { TodoInfo } from "../../Types/Interfase"
 import styles from './Filter.module.css'
 import { FilterStatus } from "../../Types/Interfase"
+import { Flex, Button } from "antd"
 
 type PropsFilter = {
     completionStatus: FilterStatus, 
@@ -11,24 +12,23 @@ type PropsFilter = {
 
 const Filter = (props: PropsFilter) => {
     return (
-        <div className={styles.filter}>
-            <button 
+        <Flex gap="large" className={styles.filter}> 
+            <Button
                 className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.all ? styles.btn__active : ''}`} 
-                onClick={() => props.setCompletionStatus(FilterStatus.all)} 
-                autoFocus>
+                onClick={() => props.setCompletionStatus(FilterStatus.all)}>
                 Все({props.taskStatus?.all})
-            </button>
-            <button 
+            </Button>
+            <Button
                 className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.inWork ? styles.btn__active : ''}`} 
                 onClick={() => props.setCompletionStatus(FilterStatus.inWork)}>
                 В прогрессе({props.taskStatus?.inWork})
-            </button>
-            <button 
+            </Button>
+            <Button
                 className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.completed ? styles.btn__active : ''}`} 
                 onClick={() => props.setCompletionStatus(FilterStatus.completed)}>
                 Завершенные({props.taskStatus?.completed})
-            </button>
-        </div>
+            </Button>
+        </Flex>
     )
 }
 

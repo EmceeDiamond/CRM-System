@@ -1,6 +1,4 @@
 .filter {
-    display: flex;
-    gap: 15px;
     padding-bottom: 20px;
 }
 
@@ -9,6 +7,10 @@
     color: rgb(93, 93, 93);
     background-color: rgb(255, 255, 255);
     border: none;
+}
+
+.filter__btn:focus-visible{
+    outline: none;
 }
 
 .btn__active {

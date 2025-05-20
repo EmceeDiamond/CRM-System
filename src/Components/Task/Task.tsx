@@ -1,12 +1,17 @@
 import { Todo, TodoRequest } from "../../Types/Interfase"
-import { deleteTodo, putTodo } from "../../API/fetch"
+import { deleteTodo, putTodo } from "../../API/api"
 import styles from './Task.module.css'
 import React, { useState } from "react"
+import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
+import { EditTwoTone, DeleteOutlined, UndoOutlined, SaveOutlined } from '@ant-design/icons';
 
 type Props = {
     task: Todo,
     updateState: () => void
 }
+
+const { Paragraph } = Typography;
+
 const Task = (props: Props) => {
 
     const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -64,78 +69,106 @@ const Task = (props: Props) => {
     }
 
     return (
-        <div className={styles.task} style={{height: (inputData.length < 26 ? 30 : inputData.length < 53 ? 50 : 70)}}>
+        <Flex style={{height: (inputData.length < 26 ? 30 : inputData.length < 53 ? 50 : 70)}}>
             {isEdit ? 
-                <div className={styles.editingMode}>
-                    <div >
-                        <form id="editingMode__form" className={styles.editingMode__txt}>
-                            <input 
-                                type="checkbox" 
-                                id={"checkboxEdit"+`${props.task.id}`} 
-                                className={styles.checkbox} 
-                                checked={props.task.isDone} 
-                                onChange={handleChangeStatus}/>
-                            <label 
-                                htmlFor={"checkboxEdit"+`${props.task.id}`} 
-                                className={styles.checkboxLabel}></label>
-                            <input 
-                                defaultValue={props.task.title} 
-                                onChange={handleInput} 
-                                className={styles.editingMode__txt__input} 
-                                style={{width: (props.task.title.length + 2) * 8}}/>
-                        </form>
-                        
-                    </div>
-                    <div className={styles.editingMode__btn}>
-                        <button 
-                            type="button"
+                <Flex className={styles.editingMode}> 
+                    <Form id="editingMode__form" onFinish={handleSaveChanges} onReset={handleUndoChanges}>
+                        <Flex className={styles.editingMode__txt}>
+                            <Form.Item className={styles.formItem}>
+                                <Checkbox 
+                                    checked={props.task.isDone} 
+                                    onChange={handleChangeStatus}
+                                />
+                            </Form.Item> 
+                            <Form.Item 
+                                name="edit-task" 
+                                label="" 
+                                className={styles.formItem}
+                                rules={[
+                                    {
+                                        required: true
+                                    },
+                                    { 
+                                        whitespace: true,
+                                        message: "Ввод пустых сиволов запрещен"
+                                    },
+                                    { 
+                                        min: 2,
+                                        message: "Минимальная длинна текста 2 символа"
+                                    },
+                                    { 
+                                        max: 64,
+                                        message: "Максимальная длинна текста 64 символа"
+                                    }
+                                ]}>
+                                <Input
+                                    defaultValue={props.task.title} 
+                                    onChange={handleInput} 
+                                    className={styles.editingMode__txt__input} 
+                                    style={{width: ((props.task.title.length > inputData.length ? props.task.title.length : inputData.length) + 2) * 10}}
+                                />
+                            </Form.Item>
+                        </Flex>
+                    </Form>
+                    <Flex className={styles.editingMode__btn}>
+                        <Button 
+                            htmlType="submit"
                             form="editingMode__form" 
-                            onClick={handleSaveChanges} 
-                            className={`${styles.btn} ${styles.btnSaveEdit}`}></button>
-                        <button 
-                            type="button"
+                            icon={<SaveOutlined />}
+                            style={{fontSize: '150%', color:"green"}}
+                            className={`${styles.btn}`}                        
+                        />
+                        <Button 
+                            htmlType="reset"
                             form="editingMode__form" 
-                            onClick={handleUndoChanges} 
-                            className={`${styles.btn} ${styles.btnBreakEdit}`}></button>
-                        <button 
-                            type="button"
+                            icon={<UndoOutlined />} 
+                            style={{fontSize: '150%', color:"red"}}
+                            className={`${styles.btn}`}
+                        />
+                        <Button 
+                            htmlType="button"
                             form="editingMode__form" 
                             onClick={() => handleDeleteTask(props.task.id)} 
-                            className={`${styles.btn} ${styles.btnDelete}`}></button>
-                    </div>
-                    
-                </div>    
-                :
-                <div className={styles.normalMode}>
-                    <div className={styles.normalMode__txt}>
-                        <form id="normalMode__form">
-                            <input 
-                                type="checkbox" 
-                                id={"checkboxNormal"+`${props.task.id}`} 
-                                className={styles.checkbox} 
-                                checked={props.task.isDone} 
-                                onChange={handleChangeStatus}/>
-                            <label 
-                                htmlFor={"checkboxNormal"+`${props.task.id}`} 
-                                className={styles.checkboxLabel}></label>
-                        </form>
-                        <p>{props.task.title}</p>
-                    </div>
-                    <div className={styles.normalMode__btn}>
-                        <button 
-                            type="button"
+                            className={`${styles.btn}`}
+                            icon={<DeleteOutlined />} 
+                            style={{fontSize: '150%', color: 'red'}}
+                        />
+                    </Flex>
+                </Flex>
+            : 
+                <Flex className={styles.normalMode}>
+                    <Flex className={styles.normalMode__txt}>
+                        <Form id="normalMode__form">
+                            <Form.Item className={styles.formItem}>
+                                <Checkbox 
+                                    checked={props.task.isDone} 
+                                    onChange={handleChangeStatus}
+                                />
+                            </Form.Item>
+                        </Form>
+                        <Paragraph style={{margin: 0}}>{props.task.title}</Paragraph>
+                    </Flex >
+                    <Flex className={styles.normalMode__btn}>
+                        <Button
+                            htmlType="button"
                             form="normalMode__form" 
-                            onClick={handleStartEdit} 
-                            className={`${styles.btn} ${styles.btnEdit}`}></button>   
-                        <button 
-                            type="button"
-                            form="normalMode__form" 
+                            icon={<EditTwoTone />}
+                            onClick={handleStartEdit}
+                            style={{fontSize: '150%', color:"green"}} 
+                            className={`${styles.btn}`}
+                        />
+                        <Button 
+                            htmlType="button"
+                            form="normalMode__form"
+                            icon={<DeleteOutlined />} 
+                            style={{fontSize: '150%', color: 'red'}}
                             onClick={() => handleDeleteTask(props.task.id)} 
-                            className={`${styles.btn} ${styles.btnDelete}`}></button>
-                    </div>
-                </div>
+                            className={`${styles.btn}`} 
+                        />
+                    </Flex>
+                </Flex>
             }
-        </div>
+        </Flex>
     )
 }
 

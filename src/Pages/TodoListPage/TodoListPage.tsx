@@ -1,11 +1,11 @@
 import  { useState, useEffect } from 'react'
-import { Todo, TodoInfo, MetaResponse } from '../Types/Interfase'
+import { Todo, TodoInfo, MetaResponse } from '../../Types/Interfase'
 import styles from './TodoListPage.module.css'
-import { getTodosData } from '../API/fetch'
-import TaskList from '../Components/TaskList/TaskList'
-import Filter from '../Components/Filter/Filter'
-import AddTask from '../Components/AddTask/AddTask'
-import { FilterStatus } from '.././Types/Interfase'
+import { getTodosData } from '../../API/api'
+import TaskList from '../../Components/TaskList/TaskList'
+import Filter from '../../Components/Filter/Filter'
+import AddTask from '../../Components/AddTask/AddTask'
+import { FilterStatus } from '../../Types/Interfase'
 
 function TodoListPage() {
     const [tasksList, setTasksList] = useState<Todo[]>([])
@@ -30,7 +30,10 @@ function TodoListPage() {
     }
 
     useEffect(() => {
-        getData(completionStatus)
+        const interval = setInterval(() => getData(completionStatus), 5000);
+        return () => {
+            clearInterval(interval);
+        };
     }, [completionStatus]);
 
     return (
