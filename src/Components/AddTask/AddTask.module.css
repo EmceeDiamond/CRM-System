@@ -1,9 +1,3 @@
-.addTask {
-    display: flex;
-    gap: 20px;
-    padding-bottom: 30px;
-}
-
 .addTask__input {
     width: 200px;
     height: 30px;
@@ -15,6 +9,7 @@
 
 .addTask__input:focus{
     outline: none;
+    box-shadow: 8px 8px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
 .addTask__btn {

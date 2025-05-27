@@ -1,43 +1,60 @@
-import { useState } from "react";
-import { postTodo } from "../../API/fetch";
+import { postNewTodo } from "../../API/api";
 import styles from './AddTask.module.css'
+import { Button, Form, Input, Flex } from 'antd';
 
 type PropsAddTask = {
     getData: () => void
 }
 
 const AddTask = (props: PropsAddTask) => {
-    const [inputData, setInputData] = useState<string>("");
+    const [form] = Form.useForm();
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputData(e.target.value)
-        e.target.setCustomValidity("");
-    }
-
-    const addTask = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (inputData.length < 2 || inputData.length > 64){
-            alert(`Длинна текста должна быть от 2 до 64 символов. Длинна вашего текста: ${inputData .length}`)
+    const handleAddTask = async () => {
+        const inputValue = form.getFieldValue('task')
+        try {
+            await postNewTodo(inputValue)
+            props.getData()
         }
-        else {
-            postTodo(false, inputData).then(() => {
-                props.getData()
-            })
+        catch(err) {
+            console.error(err)
+            alert("Ошибка при добавлении новой задачи, попробуйте снова")
         }
-        setInputData("")
+        form.resetFields();
     }
 
     return (
-        <form action="" onSubmit={addTask} className={styles.addTask}>
-            <input 
-                type="text" 
-                value={inputData}
-                required 
-                className={styles.addTask__input}
-                placeholder='Task To Be Done...' 
-                onChange={handleInput} /> 
-            <button className={styles.addTask__btn}>Add</button>
-        </form>
+        <Form onFinish={handleAddTask} form={form}>
+            <Flex gap="large">
+                <Form.Item 
+                    name="task" 
+                    label="" 
+                    rules={[
+                        {
+                            required: true
+                        },
+                        { 
+                            whitespace: true,
+                            message: "Ввод пустых сиволов запрещен"
+                        },
+                        { 
+                            min: 2,
+                            message: "Минимальная длинна текста 2 символа"
+                        },
+                        { 
+                            max: 64,
+                            message: "Максимальная длинна текста 64 символа"
+                        }
+                    ]}>
+                    <Input 
+                        type="text"
+                        className={styles.addTask__input}
+                        placeholder='Task To Be Done...' />
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="submit" type="primary" className={styles.addTask__btn}>Add</Button>
+                </Form.Item>
+            </Flex>
+        </Form>
     )
 }
 
