@@ -4,6 +4,7 @@ import styles from './Task.module.css'
 import { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
 import { EditTwoTone, DeleteOutlined, UndoOutlined, SaveOutlined } from '@ant-design/icons';
+import { messageError, lenString } from "../ValidationParametrs"
 
 type Props = {
     task: Todo,
@@ -11,18 +12,6 @@ type Props = {
 }
 
 const { Paragraph } = Typography;
-
-const messageError = {
-    emptyString: "Это поле не может быть пустым",
-    minLenString: "Минимальная длинна текста 2 символа",
-    maxLenString: "Максимальная длинна текста 64 символа",
-    sendingEmptyString: "Добавление пустых задач запрещен"
-}
-
-const lenString = {
-    min: 2,
-    max: 64
-}
 
 const Task = (props: Props) => {
 
@@ -41,6 +30,9 @@ const Task = (props: Props) => {
 
     const handleStartEdit = () => {
         setIsEdit(true)
+        //form.setFieldsValue({edit: props.task.title})
+        
+        //console.log(form.getFieldValue('edit'), props.task.title)
     }
 
     const handleSaveChanges = async() => {
@@ -52,12 +44,12 @@ const Task = (props: Props) => {
         }
         try {
             await putTodo(todo)
-            props.updateState()
+            await props.updateState()
         } catch(err) {
             console.error(err)
         }
         setIsEdit(false)
-        console.log(todo)
+        console.log(isEdit)
     }
 
     const handleChangeStatus = async() => {
@@ -75,22 +67,23 @@ const Task = (props: Props) => {
     }
 
     const handleUndoChanges = () => {
-        //setInputData(props.task.title)
         setIsEdit(false)
-        console.log("2")
+        
+        console.log(props.task)
     }
 
     return (
         <Flex style={{height: (props.task.title.length < 26 ? 30 : props.task.title.length < 53 ? 50 : 70)}}>
-            {isEdit ? 
-                <Flex className={styles.editingMode}> 
-                    <Form 
-                        id="editingMode__form" 
-                        onFinish={handleSaveChanges} 
+            {isEdit ?
+                <Flex className={styles.editingMode}>
+                    <Form
+                        onReset={handleUndoChanges}
+                        id="editingMode__form"
+                        onFinish={handleSaveChanges}
+                        onFinishFailed={() => console.log("asd")}
                         //onFinish={props.task.title !== form.getFieldValue('edit') ? handleSaveChanges : () => void}
-                        onReset={handleUndoChanges} 
                         form={form}
-                        initialValues={{edit: `${props.task.title}`}}
+                        //initialValues={props.task.title}
                     >
                         <Flex className={styles.editingMode__txt}>
                             <Form.Item className={styles.formItem}>
@@ -103,6 +96,7 @@ const Task = (props: Props) => {
                                 name="edit" 
                                 label="" 
                                 className={styles.formItem}
+                                //initialValue={props.task.title}
                                 rules={[
                                     {
                                         required: true,
@@ -116,19 +110,21 @@ const Task = (props: Props) => {
                                         min: lenString.min,
                                         message: messageError.minLenString
                                     },
-                                    { 
+                                    {
                                         max: lenString.max,
                                         message: messageError.maxLenString
                                     }
                                 ]}
+                                
+                            
                                 >
                                 <Input
-                                    defaultValue={props.task.title} 
-                                    //onChange={handleInput} 
+                                    defaultValue={props.task.title}
+                                    //onChange={handleInput}
                                     autoFocus
                                     type="text"
-                                    className={styles.editingMode__txt__input} 
-                                    style={{width: ((props.task.title.length > form.getFieldValue('edit').length ? props.task.title.length : form.getFieldValue('edit').length) + 2) * 10}}
+                                    className={styles.editingMode__txt__input}
+                                    style={{width: ((props.task.title.length) + 2) * 10}}
                                 />
                             </Form.Item>
                         </Flex>
@@ -158,7 +154,7 @@ const Task = (props: Props) => {
                         />
                     </Flex>
                 </Flex>
-            : 
+            :
                 <Flex className={styles.normalMode}>
                     <Flex className={styles.normalMode__txt}>
                         <Checkbox 
@@ -176,7 +172,7 @@ const Task = (props: Props) => {
                             style={{fontSize: '150%', color:"green"}} 
                             className={`${styles.btn}`}
                         />
-                        <Button 
+                        <Button
                             htmlType="button"
                             //form="normalMode__form"
                             icon={<DeleteOutlined />} 

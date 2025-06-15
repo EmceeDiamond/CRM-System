@@ -1,6 +1,7 @@
 import { postNewTodo } from "../../API/api";
 import styles from './AddTask.module.css'
 import { Button, Form, Input, Flex } from 'antd';
+import { messageError, lenString } from "../ValidationParametrs";
 
 type PropsAddTask = {
     getData: () => void
@@ -13,7 +14,7 @@ const AddTask = (props: PropsAddTask) => {
         const inputValue = form.getFieldValue('task')
         try {
             await postNewTodo(inputValue)
-            props.getData()
+            await props.getData()
         }
         catch(err) {
             console.error(err)
@@ -30,19 +31,20 @@ const AddTask = (props: PropsAddTask) => {
                     label="" 
                     rules={[
                         {
-                            required: true
+                            required: true,
+                            message: messageError.emptyString
                         },
                         { 
                             whitespace: true,
-                            message: "Ввод пустых сиволов запрещен"
+                            message: messageError.sendingEmptyString
                         },
                         { 
-                            min: 2,
-                            message: "Минимальная длинна текста 2 символа"
+                            min: lenString.min,
+                            message: messageError.minLenString
                         },
                         { 
-                            max: 64,
-                            message: "Максимальная длинна текста 64 символа"
+                            max: lenString.max,
+                            message: messageError.maxLenString
                         }
                     ]}>
                     <Input 
