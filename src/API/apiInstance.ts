@@ -1,6 +1,6 @@
 import axios from "axios"; 
 
-const instance = axios.create({
+const instanceTask = axios.create({
     baseURL : 'https://easydev.club/api/v1/',
     timeout : 1000, 
     headers: {
@@ -8,4 +8,11 @@ const instance = axios.create({
     }
 });
 
-export default instance;
+const instanceAuth = axios.create({
+    baseURL : 'https://easydev.club/api/v1/',
+    headers: {
+        'Content-Type': "application/json",
+    }
+});
+
+export {instanceTask, instanceAuth};

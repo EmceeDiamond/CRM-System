@@ -5,6 +5,8 @@ import { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
 import { EditTwoTone, DeleteOutlined, UndoOutlined, SaveOutlined } from '@ant-design/icons';
 import { messageError, lenString } from "../ValidationParametrs"
+import { useDispatch } from "react-redux"
+import { changeTask, changeTaskStatus } from "../../ReduxStore/taskSlice"
 
 type Props = {
     task: Todo,
@@ -14,7 +16,7 @@ type Props = {
 const { Paragraph } = Typography;
 
 const Task = (props: Props) => {
-
+    const dispatch = useDispatch()
     const [isEdit, setIsEdit] = useState<boolean>(false)
     //const [inputData, setInputData] = useState<string>(props.task.title);
     const [form] = Form.useForm();
@@ -30,26 +32,22 @@ const Task = (props: Props) => {
 
     const handleStartEdit = () => {
         setIsEdit(true)
-        //form.setFieldsValue({edit: props.task.title})
-        
-        //console.log(form.getFieldValue('edit'), props.task.title)
     }
 
     const handleSaveChanges = async() => {
-
         const todo: TodoRequest = {
             isDone: props.task.isDone,
             title: form.getFieldValue('edit'),
             id: props.task.id
         }
         try {
+            dispatch(changeTask(todo))
             await putTodo(todo)
-            await props.updateState()
+            props.updateState()
         } catch(err) {
             console.error(err)
         }
         setIsEdit(false)
-        console.log(isEdit)
     }
 
     const handleChangeStatus = async() => {
@@ -59,6 +57,7 @@ const Task = (props: Props) => {
             id: props.task.id
         }
         try {
+            dispatch(changeTaskStatus({isDone: todo.isDone || false, id: todo.id}))
             await putTodo(todo);
             props.updateState()
         } catch(err) {

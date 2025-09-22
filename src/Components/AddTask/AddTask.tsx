@@ -2,19 +2,26 @@ import { postNewTodo } from "../../API/api";
 import styles from './AddTask.module.css'
 import { Button, Form, Input, Flex } from 'antd';
 import { messageError, lenString } from "../ValidationParametrs";
+import { FilterStatus } from "../../Types/Interfase";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../ReduxStore/store";
+import { addTask } from "../../ReduxStore/taskSlice";
 
 type PropsAddTask = {
-    getData: () => void
+    getData: (completionStatus: FilterStatus) => void
 }
 
 const AddTask = (props: PropsAddTask) => {
     const [form] = Form.useForm();
+    const storeSelector = useSelector((state: RootState) => state.task);
+    const dispath = useDispatch();
 
     const handleAddTask = async () => {
         const inputValue = form.getFieldValue('task')
         try {
             await postNewTodo(inputValue)
-            await props.getData()
+            dispath(addTask(inputValue))
+            props.getData(storeSelector.taskStatus)
         }
         catch(err) {
             console.error(err)
