@@ -1,17 +1,19 @@
 import { Button, Flex, Form, Input, Typography, Image} from "antd";
 import logoImage from '../../Components/img/ImageOverForm.svg';
 import skeletonImage from '../../Components/img/skeleton.svg';
-//import style from '../AuthorizationPage/AuthorizationPage.module.css';
 import style from './RegistrationPage.module.css'
 import { postRegisterNewUser } from "../../API/userApi";
 import { useNavigate } from "react-router-dom";
+import Modal from '../../Components/ModalWindow/ModalWindow.js'
+import { useState } from "react";
 
-const {Title, Paragraph} = Typography
+const {Title, Paragraph, Text} = Typography
 
 const RegistrationPage = () => {
 
     const [form] = Form.useForm();
     const navigate = useNavigate();
+    const [modalActive, setModalActive] = useState<boolean>(false);
 
     type NewUser = {
         email: string,
@@ -21,15 +23,18 @@ const RegistrationPage = () => {
         username: string
     }
 
+    const handleTransitionOnAuthorizationPage = () => {
+        navigate('/auth/login')
+    }
+
     const handleRegistrationNewUser = async (values: NewUser) => {
+        
         try {
             console.log(values)
             const status = await postRegisterNewUser(values)
             console.log(status)
             if (status === 201){
-                if (window.confirm('Нажмете „Ок“ для перенаправленния на страницу авторизации. При нажатии „Отмена“ будет обнавлена страница регистрации.')) {
-                    navigate('/auth/login')
-                }
+                setModalActive(true)
             }
             else {
                 alert('Такой пользователь уже существует')
@@ -65,7 +70,7 @@ const RegistrationPage = () => {
                         src={logoImage}
                         width={72}/>
                     <Flex vertical justify="center">
-                        <Title className={style.authorizationFormTitle} style={{fontWeight: 700, fontSize: 36, color: "rgb(82, 82, 82)", margin: 0}}>Register a new Account</Title>
+                        <Title className={style.registrationForm__title} style={{fontWeight: 700, fontSize: 36, color: "rgb(82, 82, 82)", margin: 0}}>Register a new Account</Title>
                         <Paragraph style={{fontWeight: 400, fontSize: 16, color: "rgb(82, 82, 82)"}}>See what is going on with your business</Paragraph>
                     </Flex>
                     <Form.Item 
@@ -88,7 +93,7 @@ const RegistrationPage = () => {
                                 message: 'Заполните поле Login'
                                 },
                                 {pattern: /^[a-zA-Z]{2,60}$/,
-                                message: 'Только буквы латинского алфавита, от 1 до 60 символов.'
+                                message: 'Только буквы латинского алфавита, от 2 до 60 символов.'
                                 },
                         ]}>
                         <Input type="text"/>
@@ -143,6 +148,16 @@ const RegistrationPage = () => {
                     </Form.Item>
                 </Form>
             </Flex>
+            <Modal active={modalActive} setActive={setModalActive}>
+                <Flex vertical>
+                    <Text className={style.modalWindow__txt}>Регистрация прошла успешна!</Text>
+                    <Text className={style.modalWindow__txt}>Перейти на страницу авторизации для входа в систему?</Text>
+                    <Flex justify="space-around">
+                        <Button className={style.modalWindow__btn} onClick={handleTransitionOnAuthorizationPage}>Да</Button>
+                        <Button className={style.modalWindow__btn} onClick={() => setModalActive(false)}>Нет</Button>
+                    </Flex>
+                </Flex>
+            </Modal>
         </Flex>
         
         

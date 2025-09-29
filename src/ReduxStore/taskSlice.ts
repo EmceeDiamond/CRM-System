@@ -32,7 +32,9 @@ const taskSlice = createSlice({
         },
 
         changeTaskListStatus: (state, action) => {
+            console.log(action.payload)
             state.taskStatus = action.payload
+            console.log(state.taskStatus)
         },
 
         addTask: (state, action) => {

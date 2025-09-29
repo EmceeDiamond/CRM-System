@@ -7,9 +7,9 @@ import Filter from '../../Components/Filter/Filter'
 import AddTask from '../../Components/AddTask/AddTask'
 import { FilterStatus } from '../../Types/Interfase'
 import { useDispatch } from 'react-redux'
-//import { postRefreshToken } from '../../API/userApi'
 import { AppDispatch } from '../../ReduxStore/store'
 import { taskLoading, taskReceived } from '../../ReduxStore/taskSlice'
+import { store } from '../../ReduxStore/store'
 
 function TodoListPage() {
     const dispatch: AppDispatch = useDispatch()
@@ -25,7 +25,7 @@ function TodoListPage() {
     }
 
     useEffect(() => {
-        const interval = setInterval(() => {getData(FilterStatus.all)}, 5000);
+        const interval = setInterval(() => {getData(store.getState().task.taskStatus)}, 5000);
         return () => {
             clearInterval(interval);
         };

@@ -21,10 +21,24 @@
     margin: 0 auto;
 }
 
-.authorizationFormTitle {
+.registrationForm__title {
     font-family: "Nunito Sans", sans-serif;
 };
 
 .logoForm {
     margin: 0 auto;
+}
+
+.modalWindow__txt {
+    font-size: 18px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 500;
+    text-align: center;
+}
+
+.modalWindow__btn {
+    font-size: 16px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 500;
+    margin-top: 10px;
 }
