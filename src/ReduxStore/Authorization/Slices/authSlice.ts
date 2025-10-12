@@ -1,15 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AuthState, isAuthenticatedStatus } from '../Types/Interfase';
-import { clearAccessToken } from '../Components/AccessToken';
-
-const initialState: AuthState = {
-    isAuthenticated: false,
-    isAuthenticatedStatus: isAuthenticatedStatus.initializing
-};
+import { isAuthenticatedStatus } from '../../../Types/Interfase';
+import { clearAccessToken } from '../../../Components/AccessToken';
+import { initialStateAuthSlice } from '../../InitialState';
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState,
+    initialState: initialStateAuthSlice,
     reducers: {
         toggleAuthenticated: (state, action) => {
             state.isAuthenticated = action.payload;

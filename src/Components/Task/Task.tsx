@@ -5,26 +5,26 @@ import { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
 import { EditTwoTone, DeleteOutlined, UndoOutlined, SaveOutlined } from '@ant-design/icons';
 import { messageError, lenString } from "../ValidationParametrs"
-import { useDispatch } from "react-redux"
-import { changeTask, changeTaskStatus } from "../../ReduxStore/taskSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { changeTask, changeTaskStatus, getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice"
+import { AppDispatch, RootState } from "../../ReduxStore/store"
 
 type Props = {
     task: Todo,
-    updateState: () => void
 }
 
 const { Paragraph } = Typography;
 
 const Task = (props: Props) => {
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
+    const stateTaskSelector = useSelector((state: RootState) => state.task)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    //const [inputData, setInputData] = useState<string>(props.task.title);
     const [form] = Form.useForm();
     
     const handleDeleteTask = async(id: number) => {
         try {
             await deleteTodo(id);
-            props.updateState();
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
         }
@@ -43,7 +43,7 @@ const Task = (props: Props) => {
         try {
             dispatch(changeTask(todo))
             await putTodo(todo)
-            props.updateState()
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
         }
@@ -59,7 +59,7 @@ const Task = (props: Props) => {
         try {
             dispatch(changeTaskStatus({isDone: todo.isDone || false, id: todo.id}))
             await putTodo(todo);
-            props.updateState()
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
         }

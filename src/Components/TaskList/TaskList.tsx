@@ -1,26 +1,32 @@
 import { List } from "antd"
 import { Task } from "../Task/Task"
 import styles from './TaskList.module.css'
-import { useSelector } from "react-redux"
-import { RootState } from "../../ReduxStore/store"
-import { FilterStatus } from "../../Types/Interfase"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../ReduxStore/store"
+import { getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice"
+import { useEffect } from "react"
 
-type PropsTaskList = {
-    getData: (value: FilterStatus) => void
-}
-
-const TaskList = (props: PropsTaskList) => {
+const TaskList = () => {
 
     const selectorTest = useSelector((state: RootState) => state.task)
+    const dispatch: AppDispatch = useDispatch();
+    console.log(selectorTest.taskStatus)
+
+    useEffect(() => {
+        const interval = setInterval(() => {dispatch(getTaskList(selectorTest.taskStatus))}, 5000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [selectorTest.taskStatus, dispatch])
     
     return (
         <List
             className={styles.task__list}
-            dataSource={selectorTest.taskList}
+            dataSource={selectorTest.taskList.data !== undefined ? selectorTest.taskList.data : []}
             style={{display: "block"}}
             renderItem={(item) => (
                 <List.Item className={styles.task} style={{display: "block"}}>
-                    <Task task={item} updateState={() => props.getData(selectorTest.taskStatus)}/>
+                    <Task task={item} />
                 </List.Item>
             )}>
         </List>

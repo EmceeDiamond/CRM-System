@@ -1,3 +1,5 @@
+import { AsyncThunk } from "@reduxjs/toolkit";
+
 export interface TodoRequest { 
 	id: number;
 	title?: string;
@@ -33,14 +35,13 @@ export enum FilterStatus {
 }
 
 export interface TaskState {
-    loading: string,
-    taskList: Todo[],
-    taskStatus: FilterStatus,
-    taskCountsByStatus: TodoInfo
+    taskList: IAsyncParticle<Todo[]>;
+    taskStatus: FilterStatus;
+    taskCountsByStatus: TodoInfo | undefined;
 }
 
 export type Token = {
-    accessToken: string,
+    accessToken: string;
     refreshToken: string
 }
 
@@ -65,3 +66,40 @@ export enum isAuthenticatedStatus {
     initializing = 'initializing',
     authenticated = 'authenticated'
 }
+
+export interface IAsyncParticle<T> {
+    data: T | undefined;
+    error: unknown | undefined;
+    errorCounter: number;
+    status: 'idle' | 'pending' | 'fulfilled' | 'rejected';
+}
+
+export interface IAsyncState {
+    [key: string]: IAsyncParticle<unknown>;
+}
+
+export interface IAsyncDataStatus {
+    hasError: boolean;
+    isIdle: boolean;
+    isLoading: boolean;
+    isLoadingOrIdle: boolean;
+    isLoaded: boolean;
+    isLoadedOrError: boolean;
+}
+
+export interface IErrorData {
+    message: string;
+    code?: number | string;
+    details?: unknown;
+}
+
+export type TSliceMethod<
+    Args = void,
+    Result = unknown,
+    RejectValue = unknown
+> = AsyncThunk<Result, Args, { rejectValue: RejectValue }>;
+
+export type TPaginationSliceMethod<
+    Result = unknown,
+    RejectValue = unknown
+> = AsyncThunk<Result, { page: number; limit: number }, { rejectValue: RejectValue }>;

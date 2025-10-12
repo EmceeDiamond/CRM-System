@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './authSlice';
-import taskReducer from './taskSlice'
+import authReducer from './Authorization/Slices/authSlice'
+import taskReducer from './Authorization/Slices/taskSlice'
 
 export const store = configureStore({
     reducer: {
@@ -11,3 +11,4 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type storeReduxType = typeof store;

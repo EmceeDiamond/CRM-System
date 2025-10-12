@@ -7,7 +7,7 @@ import { postAuthenticateUser } from "../../API/userApi";
 import { setAccessToken } from "../../Components/AccessToken";
 import { Token } from "../../Types/Interfase";
 import { useDispatch } from "react-redux";
-import { toggleAuthenticated } from "../../ReduxStore/authSlice";
+import { toggleAuthenticated } from "../../ReduxStore/Authorization/Slices/authSlice";
 
 
 const {Title, Paragraph} = Typography

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import style from './Sider.module.css'
 import { postLogoutUser } from '../../API/userApi';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../ReduxStore/authSlice';
+import { logout } from '../../ReduxStore/Authorization/Slices/authSlice';
 
 const {Sider} = Layout;
 
