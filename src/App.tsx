@@ -6,11 +6,14 @@ import LayoutAuthorizationComponent from './Components/Layout/LayoutAuthorizatio
 import AuthorizationPage from './Pages/AuthorizationPage/AuthorizationPage.tsx';
 import RegistrationPage from './Pages/RegistrationPage/RegistrationPage.tsx';
 import PrivateRoute from './Components/PrivateRoute.tsx';
-import { useRefreshAccessToken } from './Components/RefreshToken.ts';
+import { RefreshAccessToken } from './Components/RefreshToken.ts';
+import { useDispatch } from 'react-redux';
 
 export const AppRoutes = () => {
 
-    useRefreshAccessToken();
+    const dispatch = useDispatch();
+    
+    RefreshAccessToken(dispatch);
 
     return (
         <BrowserRouter>

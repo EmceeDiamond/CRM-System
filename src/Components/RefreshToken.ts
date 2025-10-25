@@ -1,33 +1,25 @@
-import { postRefreshToken } from "../API/userApi"
-import { setAccessToken } from "./AccessToken";
+import { refreshToken } from "../API/userApi"
+import { tokenManager } from "./AccessToken";
 import {toggleAuthenticated} from '../ReduxStore/Authorization/Slices/authSlice'
 import { Token } from "../Types/Interfase";
-import { useDispatch } from "react-redux";
 import { AppDispatch } from "../ReduxStore/store";
-import { useEffect } from "react";
 
+export const REFRESH_TOKEN_KEY = 'refreshKey'
 
-export const useRefreshAccessToken = () => {
-    const dispatch = useDispatch<AppDispatch>()
-    useEffect(() => {
-        const init = async () => {
-            try {
-                const data: Token = await postRefreshToken(localStorage.getItem('refreshKey') || "");
-                if (data !== undefined) {
-                    localStorage.setItem('refreshKey', data.refreshToken)
-                    setAccessToken(data.accessToken)
-                    dispatch(toggleAuthenticated(true))
-                }
-                else {
-                    dispatch(toggleAuthenticated(false))
-                }
-                
-            } catch(err) {
-                console.log(err)
-            }
-        }
-        init();
-    }, [dispatch])
+export const RefreshAccessToken = async (dispatch: AppDispatch) => {
     
-
+    try {
+        const data: Token = await refreshToken(localStorage.getItem(REFRESH_TOKEN_KEY) || "");
+        if (data) {
+            localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken)
+            tokenManager.setAccessToken(data.accessToken)
+            dispatch(toggleAuthenticated(true))
+            return true
+        }
+    } catch(error) {
+        const err = error as {status: number}
+        if (err.status === 401) {
+            dispatch(toggleAuthenticated(false))
+        }
+    }
 }

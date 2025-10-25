@@ -1,19 +1,13 @@
 @media all {
-    .authorizationPage {
-        box-sizing: border-box;
-        
-        height: 100vh;
-    }
-
     .rightSectionPage {
-        width: calc((754/1920)*100%);
+        width: 40%;
         box-sizing: border-box;
     }
 
     .authorizationForm {
         max-width: 420px;
         padding-top: 36px;
-        padding-bottom: calc((317 / 1080) * 100vh);
+        padding-bottom: 21vh;
         margin: 0 auto;
     }
 
@@ -39,13 +33,18 @@
     .checkboxRememberMe {
         color: rgb(127, 38, 91);
     }
+
+    .labelInputFileds {
+        color: "rgb(130, 130, 130)";
+        margin: 0
+    }
 }
 
 @media (min-width: 1800px){
     .rightSectionPage {
-        padding-left: calc((140 / 1920) * 100%);
-        padding-right: calc((190 / 1920) * 100%);
-        padding-top: calc((180 / 1080) * 100vh);
+        padding-left: 7%;
+        padding-right: 10%;
+        padding-top: 17%;
     }
 }
 

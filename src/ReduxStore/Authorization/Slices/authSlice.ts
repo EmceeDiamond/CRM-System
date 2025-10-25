@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { isAuthenticatedStatus } from '../../../Types/Interfase';
-import { clearAccessToken } from '../../../Components/AccessToken';
 import { initialStateAuthSlice } from '../../InitialState';
 
 const authSlice = createSlice({
@@ -15,11 +14,14 @@ const authSlice = createSlice({
         logout: (state) => {
             state.isAuthenticated = false;
             state.isAuthenticatedStatus = isAuthenticatedStatus.initializing;
-            clearAccessToken();
-            localStorage.removeItem('refreshKey')
+        },
+
+        initializingAuth: (state) => {
+            state.isAuthenticatedStatus = isAuthenticatedStatus.initializing
+            console.log("init")
         }
     },
 });
 
-export const { toggleAuthenticated, logout } = authSlice.actions;
+export const { toggleAuthenticated, logout, initializingAuth } = authSlice.actions;
 export default authSlice.reducer;

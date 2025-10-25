@@ -1,16 +1,21 @@
-
-//import { useNavigate } from "react-router-dom";
-import { Layout } from 'antd'
+import skeletonImage from '../../img/skeleton.svg'
+import { Layout, Image, Flex } from 'antd'
 import { Outlet } from "react-router-dom";
-//import MenuItem from "antd/es/menu/MenuItem";
-//import style from './LayoutAuthorization.module.css'
 
 const LayoutAuthorizationComponent =() =>{
-    //const navigate = useNavigate();
 
     return(
-        <Layout style={{height: '100vh'}}> 
-            <Outlet />
+        <Layout style={{height: '100vh', boxSizing: 'border-box'}}> 
+            <Flex>
+                <Image
+                preview={false}
+                src={skeletonImage}
+                width='53%'
+                height='100%'
+                sizes="contain"
+                />
+                <Outlet />
+            </Flex>
         </Layout>
         
     )

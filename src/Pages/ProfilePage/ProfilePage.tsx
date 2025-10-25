@@ -1,44 +1,86 @@
-import { Form } from 'antd';
-import { getUserProfile } from '../../API/userApi';
+import { Button, Flex, Form } from 'antd';
+import { getUserProfile, logoutUser } from '../../API/userApi';
 import { useEffect, useState } from 'react';
-import { Profile } from '../../Types/Interfase';
+import { isAuthenticatedStatus, Profile } from '../../Types/Interfase';
 import style from './ProfilePage.module.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { RefreshAccessToken } from '../../Components/RefreshToken';
+import { initializingAuth, logout } from '../../ReduxStore/Authorization/Slices/authSlice';
+import { RootState } from '../../ReduxStore/store';
+import { tokenManager } from '../../Components/AccessToken';
+import { useNavigate } from 'react-router-dom';
 
 function ProfilePage() {
 
-    const [userProfileData, setUserProfileData] = useState<Profile>()
+    const [userProfileData, setUserProfileData] = useState<Profile>();
 
-    const getUserProfileData = async () => {
-        try {
-            const data = await getUserProfile();
-            if (data !== undefined) {
-                setUserProfileData(data)
-            }
-        }
-        catch {
-            console.error("Error")
-        }
-    }
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const selector = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
+        
+        const getUserProfileData = async () => {
+
+            try {
+                const data = await getUserProfile();
+                if (data) {
+                    setUserProfileData(data)
+                }
+                console.log(data)
+            }
+
+            catch(error) {
+                const err = error as { status: number };
+                if (err.status === 401) {
+                    if (selector.isAuthenticatedStatus === isAuthenticatedStatus.authenticated) {
+                        dispatch(initializingAuth())
+                        const successRefreshToken = await RefreshAccessToken(dispatch);
+
+                        if (successRefreshToken) {
+                            getUserProfileData();
+                        }
+                    }
+                    
+                }
+                console.log(err.status)
+            }
+        }
         getUserProfileData()
-    }, [])
+    }, [dispatch, selector.isAuthenticatedStatus])
+
+    const handlelogoutUser = async () => {
+        await logoutUser();
+        await navigate('./auth/login');
+        tokenManager.clearAccessToken();
+        localStorage.removeItem('refreshKey')
+        dispatch(logout())
+    }
 
     return (
-        <Form className={style.profilePage}>
-            <Form.Item
-            label='Username'>
-                {userProfileData?.username}
-            </Form.Item>
-            <Form.Item
-            label='Email'>
-                {userProfileData?.email}
-            </Form.Item>
-            <Form.Item
-            label='Phone Number'>
-                {userProfileData?.phoneNumber === undefined ? "-" : userProfileData?.phoneNumber}
-            </Form.Item>
-        </Form>
+        <Flex 
+            justify='space-between'
+            className={style.profilePage}>
+            <Form>
+                <Form.Item
+                label='Username'>
+                    {userProfileData?.username}
+                </Form.Item>
+                <Form.Item
+                label='Email'>
+                    {userProfileData?.email}
+                </Form.Item>
+                <Form.Item
+                label='Phone Number'>
+                    {userProfileData?.phoneNumber === undefined ? "-" : userProfileData?.phoneNumber}
+                </Form.Item>
+            </Form>
+            <Button 
+                type="text"
+                onClick={handlelogoutUser}>Logout</Button>
+        </Flex>
+        
     )
 }
 

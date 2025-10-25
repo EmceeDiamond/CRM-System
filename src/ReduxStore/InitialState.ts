@@ -1,8 +1,8 @@
-import { TaskState, FilterStatus, isAuthenticatedStatus, AuthState, Todo } from "../Types/Interfase"
+import { TaskState, FilterStatus, isAuthenticatedStatus, AuthState, AsyncTaskData } from "../Types/Interfase"
 import { initAsyncParticle } from "./Utils";
 
 export const initialStateTaskSlice: TaskState = {
-    taskList: initAsyncParticle<Todo[]>(undefined),
+    taskList: initAsyncParticle<AsyncTaskData>(undefined),
     taskStatus: FilterStatus.all,
     taskCountsByStatus: {
         all: 0,
@@ -13,5 +13,6 @@ export const initialStateTaskSlice: TaskState = {
 
 export const initialStateAuthSlice: AuthState = {
     isAuthenticated: false,
-    isAuthenticatedStatus: isAuthenticatedStatus.initializing
+    isAuthenticatedStatus: isAuthenticatedStatus.initializing,
+    refresh: false
 };

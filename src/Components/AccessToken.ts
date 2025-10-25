@@ -1,16 +1,18 @@
-let accessToken: string | null = null;
+class TokenManager {
 
+    private accessToken: string | null = null;
 
-export const setAccessToken = (token: string) => {
-    accessToken = token;
-};
+    setAccessToken(token: string): void {
+        this.accessToken = token;
+    }
 
-export const getAccessToken = (): string | null => {
-    return accessToken;
-};
+    getAccessToken(): string | null {
+        return this.accessToken;
+    }
 
-export const clearAccessToken = () => {
-    accessToken = null;
-};
+    clearAccessToken(): void {
+        this.accessToken = null;
+    }
+}
 
-
+export const tokenManager = new TokenManager();

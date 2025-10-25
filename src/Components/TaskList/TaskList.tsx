@@ -10,7 +10,6 @@ const TaskList = () => {
 
     const selectorTest = useSelector((state: RootState) => state.task)
     const dispatch: AppDispatch = useDispatch();
-    console.log(selectorTest.taskStatus)
 
     useEffect(() => {
         const interval = setInterval(() => {dispatch(getTaskList(selectorTest.taskStatus))}, 5000);
@@ -22,7 +21,7 @@ const TaskList = () => {
     return (
         <List
             className={styles.task__list}
-            dataSource={selectorTest.taskList.data !== undefined ? selectorTest.taskList.data : []}
+            dataSource={selectorTest.taskList.data?.data !== undefined ? selectorTest.taskList.data.data : []}
             style={{display: "block"}}
             renderItem={(item) => (
                 <List.Item className={styles.task} style={{display: "block"}}>

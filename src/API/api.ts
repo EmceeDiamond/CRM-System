@@ -22,7 +22,7 @@ const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, To
     
 }
 
-const postNewTodo = async (title: string) => {
+const addNewTodo = async (title: string) => {
     const postData = {
         isDone: false,
         title: title
@@ -57,7 +57,7 @@ const deleteTodo = async (id: number)=> {
     }
 }
 
-const putTodo = async (todo: TodoRequest) => {
+const changeTodo = async (todo: TodoRequest) => {
     try {
         const response = await instanceTask({
             url: `todos/${todo.id}`,
@@ -74,4 +74,4 @@ const putTodo = async (todo: TodoRequest) => {
     }
 }
 
-export {getTodosData, postNewTodo, deleteTodo, putTodo}
+export {getTodosData, addNewTodo, deleteTodo, changeTodo}

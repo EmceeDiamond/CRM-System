@@ -4,14 +4,8 @@
     color: rgb(255, 255, 255);
 }
 
-.registrationPage {
-    box-sizing: border-box;
-    
-    height: 100vh;
-}
-
 .rightSectionPage {
-    width: calc((754/1920)*100%);
+    width: 40%;
     box-sizing: border-box;
 }
 

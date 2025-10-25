@@ -1,40 +1,23 @@
-
-import { getAccessToken } from "../Components/AccessToken"
+import { tokenManager } from "../Components/AccessToken"
 import {instanceAuth} from "./apiInstance"
+import { PropsDataNewUser, PropsDataUser } from "../Types/Interfase"
 
-type PropsDataNewUser = { 
-    email: string,
-    login: string,
-    password: string,
-    phoneNumber: string,
-    username: string
-}
-
-type PropsDataUser = {
-    login: string,
-    password: string,
-}
-
-const postRegisterNewUser = async (dataNewUser: PropsDataNewUser) => {
+const registerNewUser = async (dataNewUser: PropsDataNewUser) => {
     try {
         const response = await instanceAuth({
             url: 'auth/signup',
             method: 'POST',
             data: dataNewUser,
         })
-
-        if (!response){
-            throw new Error ()
-        }
-
-        return response.status
+        return response.data
     }
     catch(err) {
         console.error(err);
+        throw err
     }
 }
 
-const postAuthenticateUser = async (dataUser: PropsDataUser) => {
+const authenticateUser = async (dataUser: PropsDataUser) => {
     try {
         const response = await instanceAuth({
             url: 'auth/signin',
@@ -45,16 +28,17 @@ const postAuthenticateUser = async (dataUser: PropsDataUser) => {
     }
     catch(err) {
         console.error(err);
+        throw err
     }
 }
 
-const postLogoutUser = async () => {
+const logoutUser = async () => {
     try {
         const response = await instanceAuth({
             url: 'user/logout',
             method: 'POST',
             headers: {
-                'Authorization': `${getAccessToken()}`
+                'Authorization': `${tokenManager.getAccessToken()}`
             }
         },)
         if (!response){
@@ -66,7 +50,7 @@ const postLogoutUser = async () => {
     }
 }
 
-const postRefreshToken = async (refresh: string) => {
+const refreshToken = async (refresh: string) => {
     try {
         const response = await instanceAuth({
             url: 'auth/refresh',
@@ -76,8 +60,8 @@ const postRefreshToken = async (refresh: string) => {
         return response.data
     }
     catch(err) {
-        console.error(err)
         console.error('Failed Post Request');
+        throw err
     }
 }
 
@@ -87,14 +71,20 @@ const getUserProfile = async () => {
             url: 'user/profile',
             method: 'GET',
             headers: {
-                'Authorization': `${getAccessToken()}`
+                'Authorization': `${tokenManager.getAccessToken()}`
             }
         })
-        return response.data
+        console.log(response)
+        if (response){
+            console.log(response)
+            return response.data
+        }
+        
     }
-    catch{
+    catch (err){
         console.error('Failed Get Request');
+        throw err;
     }
 }
 
-export {postRegisterNewUser, postAuthenticateUser, postLogoutUser, postRefreshToken, getUserProfile}
+export {registerNewUser, authenticateUser, logoutUser, refreshToken, getUserProfile }

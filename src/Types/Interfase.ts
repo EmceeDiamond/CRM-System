@@ -1,5 +1,3 @@
-import { AsyncThunk } from "@reduxjs/toolkit";
-
 export interface TodoRequest { 
 	id: number;
 	title?: string;
@@ -35,9 +33,14 @@ export enum FilterStatus {
 }
 
 export interface TaskState {
-    taskList: IAsyncParticle<Todo[]>;
+    taskList: IAsyncParticle<AsyncTaskData>;
     taskStatus: FilterStatus;
     taskCountsByStatus: TodoInfo | undefined;
+}
+
+export interface AsyncTaskData {
+    data: Todo[],
+    info: TodoInfo
 }
 
 export type Token = {
@@ -47,7 +50,7 @@ export type Token = {
 
 type Role = "ADMIN" | "USER" | "MODERATOR"
 
-export interface Profile { 
+export interface Profile {
     id: number; 
     username: string; 
     email: string; 
@@ -57,9 +60,24 @@ export interface Profile {
     phoneNumber: string; 
 }
 
+export type NewUser = {
+    email: string,
+    login: string,
+    password: string,
+    phoneNumber: string,
+    username: string
+}
+
+export type dataAuthenticateUser = {
+    login: string,
+    password: string,
+    rememberUser: boolean
+}
+
 export interface AuthState {
     isAuthenticated: boolean;
-    isAuthenticatedStatus: string
+    isAuthenticatedStatus: string,
+    refresh: boolean
 }
 
 export enum isAuthenticatedStatus {
@@ -93,13 +111,26 @@ export interface IErrorData {
     details?: unknown;
 }
 
-export type TSliceMethod<
-    Args = void,
-    Result = unknown,
-    RejectValue = unknown
-> = AsyncThunk<Result, Args, { rejectValue: RejectValue }>;
+export type PropsDataNewUser = { 
+    email: string,
+    login: string,
+    password: string,
+    phoneNumber: string,
+    username: string
+}
 
-export type TPaginationSliceMethod<
-    Result = unknown,
-    RejectValue = unknown
-> = AsyncThunk<Result, { page: number; limit: number }, { rejectValue: RejectValue }>;
+export type PropsDataUser = {
+    login: string,
+    password: string,
+}
+
+// export type TSliceMethod<
+//     Args = void,
+//     Result = unknown,
+//     RejectValue = unknown
+// > = AsyncThunk<Result, Args, { rejectValue: RejectValue }>;
+
+// export type TPaginationSliceMethod<
+//     Result = unknown,
+//     RejectValue = unknown
+// > = AsyncThunk<Result, { page: number; limit: number }, { rejectValue: RejectValue }>;

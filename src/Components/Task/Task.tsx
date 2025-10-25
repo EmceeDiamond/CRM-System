@@ -1,5 +1,5 @@
 import { Todo, TodoRequest } from "../../Types/Interfase"
-import { deleteTodo, putTodo } from "../../API/api"
+import { deleteTodo, changeTodo } from "../../API/api"
 import styles from './Task.module.css'
 import { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
@@ -16,8 +16,10 @@ type Props = {
 const { Paragraph } = Typography;
 
 const Task = (props: Props) => {
+
     const dispatch: AppDispatch = useDispatch()
     const stateTaskSelector = useSelector((state: RootState) => state.task)
+
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [form] = Form.useForm();
     
@@ -42,7 +44,7 @@ const Task = (props: Props) => {
         }
         try {
             dispatch(changeTask(todo))
-            await putTodo(todo)
+            await changeTodo(todo)
             dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
@@ -58,7 +60,7 @@ const Task = (props: Props) => {
         }
         try {
             dispatch(changeTaskStatus({isDone: todo.isDone || false, id: todo.id}))
-            await putTodo(todo);
+            await changeTodo(todo);
             dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
@@ -67,8 +69,6 @@ const Task = (props: Props) => {
 
     const handleUndoChanges = () => {
         setIsEdit(false)
-        
-        console.log(props.task)
     }
 
     return (
@@ -80,9 +80,7 @@ const Task = (props: Props) => {
                         id="editingMode__form"
                         onFinish={handleSaveChanges}
                         onFinishFailed={() => console.log("asd")}
-                        //onFinish={props.task.title !== form.getFieldValue('edit') ? handleSaveChanges : () => void}
                         form={form}
-                        //initialValues={props.task.title}
                     >
                         <Flex className={styles.editingMode__txt}>
                             <Form.Item className={styles.formItem}>
@@ -95,7 +93,6 @@ const Task = (props: Props) => {
                                 name="edit" 
                                 label="" 
                                 className={styles.formItem}
-                                //initialValue={props.task.title}
                                 rules={[
                                     {
                                         required: true,
@@ -119,7 +116,6 @@ const Task = (props: Props) => {
                                 >
                                 <Input
                                     defaultValue={props.task.title}
-                                    //onChange={handleInput}
                                     autoFocus
                                     type="text"
                                     className={styles.editingMode__txt__input}
@@ -165,7 +161,6 @@ const Task = (props: Props) => {
                     <Flex className={styles.normalMode__btn}>
                         <Button
                             htmlType="button"
-                            //form="normalMode__form" 
                             icon={<EditTwoTone />}
                             onClick={handleStartEdit}
                             style={{fontSize: '150%', color:"green"}} 
@@ -173,7 +168,6 @@ const Task = (props: Props) => {
                         />
                         <Button
                             htmlType="button"
-                            //form="normalMode__form"
                             icon={<DeleteOutlined />} 
                             style={{fontSize: '150%', color: 'red'}}
                             onClick={() => handleDeleteTask(props.task.id)} 

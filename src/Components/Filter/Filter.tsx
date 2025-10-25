@@ -13,17 +13,17 @@ const Filter = () => {
             <Button
                 className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.all ? styles.btn__active : ''}`} 
                 onClick={() => dispatch(changeTaskListStatus(FilterStatus.all))}>
-                Все({storeSelector.taskCountsByStatus?.all})
+                Все({storeSelector.taskList.data?.info.all})
             </Button>
             <Button
                 className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.inWork ? styles.btn__active : ''}`} 
                 onClick={() => dispatch(changeTaskListStatus(FilterStatus.inWork))}>
-                В прогрессе({storeSelector.taskCountsByStatus?.inWork})
+                В прогрессе({storeSelector.taskList.data?.info.inWork})
             </Button>
             <Button
                 className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.completed ? styles.btn__active : ''}`} 
                 onClick={() => dispatch(changeTaskListStatus(FilterStatus.completed))}>
-                Завершенные({storeSelector.taskCountsByStatus?.completed})
+                Завершенные({storeSelector.taskList.data?.info.completed})
             </Button>
         </Flex>
     )
