@@ -25,14 +25,14 @@ function ProfilePage() {
 
             try {
                 const data = await getUserProfile();
+
                 if (data) {
                     setUserProfileData(data)
                 }
-                console.log(data)
             }
-
             catch(error) {
                 const err = error as { status: number };
+
                 if (err.status === 401) {
                     if (selector.isAuthenticatedStatus === isAuthenticatedStatus.authenticated) {
                         dispatch(initializingAuth())
@@ -53,6 +53,7 @@ function ProfilePage() {
     const handlelogoutUser = async () => {
         await logoutUser();
         await navigate('./auth/login');
+        
         tokenManager.clearAccessToken();
         localStorage.removeItem('refreshKey')
         dispatch(logout())

@@ -12,7 +12,9 @@ const TaskList = () => {
     const dispatch: AppDispatch = useDispatch();
 
     useEffect(() => {
+
         const interval = setInterval(() => {dispatch(getTaskList(selectorTest.taskStatus))}, 5000);
+        
         return () => {
             clearInterval(interval);
         };

@@ -7,13 +7,18 @@ import { AppDispatch, RootState } from "../../ReduxStore/store";
 import {  getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice";
 
 const AddTask = () => {
+
     const [form] = Form.useForm();
     const [error, contextHolder] = notification.useNotification();
+
     const storeSelector = useSelector((state: RootState) => state.task);
+
     const dispath: AppDispatch = useDispatch();
 
     const handleAddTask = async () => {
+
         const inputValue = form.getFieldValue('task')
+
         try {
             await addNewTodo(inputValue)
             dispath(getTaskList(storeSelector.taskStatus))
@@ -27,6 +32,7 @@ const AddTask = () => {
                 duration: 7
             });
         }
+        
         form.resetFields();
     }
 

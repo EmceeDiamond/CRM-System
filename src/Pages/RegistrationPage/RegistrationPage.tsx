@@ -13,33 +13,33 @@ const RegistrationPage = () => {
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
-    const [modalActive, setModalActive] = useState<boolean>(false);
     const [errorAlert, contextHolder] = notification.useNotification();
 
+    const [modalActive, setModalActive] = useState<boolean>(false);
+    
     const handleTransitionOnAuthorizationPage = () => {
         navigate('/auth/login')
         setModalActive(false)
     }
 
     const handleRegistrationNewUser = async (values: NewUser) => {
-        
         try {
             const resultRegistration = await registerNewUser(values)
+
             if (resultRegistration){
                 setModalActive(true)
             }
         }
         catch(err) {
             const error = err as {status: number}
+
             if (error.status === 409) {
                 errorAlert.info({
                     message: "Ошибка!",
                     description: "Такой пользователь уже существует!!!",
                     placement: "topRight",
                     duration: 7
-            });
-
-            }
+            });}
             else {
                 errorAlert.info({
                     message: "Ошибка!",

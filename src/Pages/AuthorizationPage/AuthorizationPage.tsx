@@ -24,8 +24,10 @@ const AuthorizationPage = () => {
     }
 
     const handleAuthorizationAccount = async (values: dataAuthenticateUser) => {
+
         try {
             const tokens: Token = await authenticateUser(values)
+
             if (tokens) {
                 tokenManager.setAccessToken(tokens.accessToken)
                 localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken.toString())
@@ -42,7 +44,9 @@ const AuthorizationPage = () => {
             }
         }
         catch(err) {
+
             const error = err as {status: number} 
+
             if (error.status === 401){ 
                 errorAlert.info({
                     message: "Ошибка!",
@@ -51,6 +55,7 @@ const AuthorizationPage = () => {
                     duration: 7
                 });
             }
+            
             console.error(err)
         }
         form.resetFields()

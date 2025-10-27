@@ -6,8 +6,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { changeTaskListStatus } from "../../ReduxStore/Authorization/Slices/taskSlice"
 
 const Filter = () => {
+
     const storeSelector = useSelector((state: RootState) => state.task)
+
     const dispatch = useDispatch()
+    
     return (
         <Flex gap="large" className={styles.filter}> 
             <Button

@@ -10,14 +10,17 @@ export const RefreshAccessToken = async (dispatch: AppDispatch) => {
     
     try {
         const data: Token = await refreshToken(localStorage.getItem(REFRESH_TOKEN_KEY) || "");
+
         if (data) {
             localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken)
             tokenManager.setAccessToken(data.accessToken)
             dispatch(toggleAuthenticated(true))
             return true
         }
-    } catch(error) {
+    } 
+    catch(error) {
         const err = error as {status: number}
+
         if (err.status === 401) {
             dispatch(toggleAuthenticated(false))
         }

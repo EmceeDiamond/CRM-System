@@ -1,8 +1,6 @@
 import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
 import {instanceTask} from "./apiInstance"
 
-
-
 const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
         const response = await instanceTask({

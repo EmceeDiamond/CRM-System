@@ -27,7 +27,8 @@ const Task = (props: Props) => {
         try {
             await deleteTodo(id);
             dispatch(getTaskList(stateTaskSelector.taskStatus))
-        } catch(err) {
+        } 
+        catch(err) {
             console.error(err)
         }
     }
