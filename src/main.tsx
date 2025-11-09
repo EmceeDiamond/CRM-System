@@ -1,19 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import TodoListPage from './Pages/TodoListPage/TodoListPage.tsx'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProfilePage from './Pages/ProfilePage/ProfilePage.tsx';
-import LayoutComponent from './Components/Layout/Layout.tsx';
+import { Provider } from 'react-redux';
+import { store } from './ReduxStore/store.ts';
+import { AppRoutes } from './App.tsx';
+import './index.module.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter> 
-      <LayoutComponent>
-        <Routes>
-          <Route path="/profile" element={<ProfilePage />}/>
-          <Route path="/" element={<TodoListPage />}/>
-        </Routes>
-      </LayoutComponent>
-    </BrowserRouter>
+    <Provider store={store}>
+      <AppRoutes />
+    </Provider>
   </StrictMode>,
 )

@@ -13,10 +13,10 @@ const SiderComponent = () => {
     <Sider className={style.sider}>
         <Menu>
             <MenuItem>
-                <span onClick={() => navigate('./')}>Todo List</span>
+                <span onClick={() => navigate('./main')}>Список задач</span>
             </MenuItem>
             <MenuItem>
-                <span onClick={() => navigate('./profile')}>Profile</span>
+                <span onClick={() => navigate('./profile')}>Личный кабинет</span>
             </MenuItem>
         </Menu>
     </Sider>

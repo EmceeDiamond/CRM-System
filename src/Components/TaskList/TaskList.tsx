@@ -1,24 +1,33 @@
 import { List } from "antd"
-import { Todo } from "../../Types/Interfase"
 import { Task } from "../Task/Task"
 import styles from './TaskList.module.css'
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "../../ReduxStore/store"
+import { getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice"
+import { useEffect } from "react"
 
-type PropsTaskList = {
-    tasksList: Todo[],
-    getData: () => void,
-    completionStatus: string
-}
+const TaskList = () => {
 
-const TaskList = (props: PropsTaskList) => {
+    const selectorTest = useSelector((state: RootState) => state.task)
+    const dispatch: AppDispatch = useDispatch();
 
+    useEffect(() => {
+
+        const interval = setInterval(() => {dispatch(getTaskList(selectorTest.taskStatus))}, 5000);
+        
+        return () => {
+            clearInterval(interval);
+        };
+    }, [selectorTest.taskStatus, dispatch])
+    
     return (
         <List
             className={styles.task__list}
-            dataSource={props.tasksList}
+            dataSource={selectorTest.taskList.data?.data !== undefined ? selectorTest.taskList.data.data : []}
             style={{display: "block"}}
             renderItem={(item) => (
                 <List.Item className={styles.task} style={{display: "block"}}>
-                    <Task task={item} updateState={props.getData}/>
+                    <Task task={item} />
                 </List.Item>
             )}>
         </List>

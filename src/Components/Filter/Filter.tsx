@@ -1,32 +1,32 @@
-import React from "react"
-import { TodoInfo } from "../../Types/Interfase"
 import styles from './Filter.module.css'
 import { FilterStatus } from "../../Types/Interfase"
 import { Flex, Button } from "antd"
+import { RootState } from "../../ReduxStore/store"
+import { useDispatch, useSelector } from "react-redux"
+import { changeTaskListStatus } from "../../ReduxStore/Authorization/Slices/taskSlice"
 
-type PropsFilter = {
-    completionStatus: FilterStatus, 
-    taskStatus?: TodoInfo,
-    setCompletionStatus: React.Dispatch<React.SetStateAction<FilterStatus>>
-}
+const Filter = () => {
 
-const Filter = (props: PropsFilter) => {
+    const storeSelector = useSelector((state: RootState) => state.task)
+
+    const dispatch = useDispatch()
+    
     return (
         <Flex gap="large" className={styles.filter}> 
             <Button
-                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.all ? styles.btn__active : ''}`} 
-                onClick={() => props.setCompletionStatus(FilterStatus.all)}>
-                Все({props.taskStatus?.all})
+                className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.all ? styles.btn__active : ''}`} 
+                onClick={() => dispatch(changeTaskListStatus(FilterStatus.all))}>
+                Все({storeSelector.taskList.data?.info.all})
             </Button>
             <Button
-                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.inWork ? styles.btn__active : ''}`} 
-                onClick={() => props.setCompletionStatus(FilterStatus.inWork)}>
-                В прогрессе({props.taskStatus?.inWork})
+                className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.inWork ? styles.btn__active : ''}`} 
+                onClick={() => dispatch(changeTaskListStatus(FilterStatus.inWork))}>
+                В прогрессе({storeSelector.taskList.data?.info.inWork})
             </Button>
             <Button
-                className={`${styles.filter__btn} ${props.completionStatus === FilterStatus.completed ? styles.btn__active : ''}`} 
-                onClick={() => props.setCompletionStatus(FilterStatus.completed)}>
-                Завершенные({props.taskStatus?.completed})
+                className={`${styles.filter__btn} ${storeSelector.taskStatus === FilterStatus.completed ? styles.btn__active : ''}`} 
+                onClick={() => dispatch(changeTaskListStatus(FilterStatus.completed))}>
+                Завершенные({storeSelector.taskList.data?.info.completed})
             </Button>
         </Flex>
     )

@@ -1,0 +1,57 @@
+@media all {
+    .rightSectionPage {
+        width: 40%;
+        box-sizing: border-box;
+    }
+
+    .authorizationForm {
+        max-width: 420px;
+        padding-top: 36px;
+        padding-bottom: 21vh;
+        margin: 0 auto;
+    }
+
+    .authorizationFormTitle {
+        font-family: "Nunito Sans", sans-serif;
+    };
+
+    .logoForm {
+        margin: 0 auto;
+    }
+
+    .loginBtn {
+        width: 100%;
+        background-color: rgb(127, 38, 91);
+        color: rgb(255, 255, 255);
+    }
+
+    .loginBtn:hover {
+        border-color: rgb(127, 38, 91);
+        color: rgb(127, 38, 91);
+    }
+
+    .checkboxRememberMe {
+        color: rgb(127, 38, 91);
+    }
+
+    .labelInputFileds {
+        color: "rgb(130, 130, 130)";
+        margin: 0
+    }
+}
+
+@media (min-width: 1800px){
+    .rightSectionPage {
+        padding-left: 7%;
+        padding-right: 10%;
+        padding-top: 17%;
+    }
+}
+
+@media (max-width: 1800px){
+    .rightSectionPage {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+    }
+}

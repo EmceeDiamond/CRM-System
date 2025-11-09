@@ -1,55 +1,56 @@
 import { Todo, TodoRequest } from "../../Types/Interfase"
-import { deleteTodo, putTodo } from "../../API/api"
+import { deleteTodo, changeTodo } from "../../API/api"
 import styles from './Task.module.css'
 import { useState } from "react"
 import { Flex, Form, Input, Checkbox, Button, Typography } from "antd"
 import { EditTwoTone, DeleteOutlined, UndoOutlined, SaveOutlined } from '@ant-design/icons';
 import { messageError, lenString } from "../ValidationParametrs"
+import { useDispatch, useSelector } from "react-redux"
+import { changeTask, changeTaskStatus, getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice"
+import { AppDispatch, RootState } from "../../ReduxStore/store"
 
 type Props = {
     task: Todo,
-    updateState: () => void
 }
 
 const { Paragraph } = Typography;
 
 const Task = (props: Props) => {
 
+    const dispatch: AppDispatch = useDispatch()
+    const stateTaskSelector = useSelector((state: RootState) => state.task)
+
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    //const [inputData, setInputData] = useState<string>(props.task.title);
     const [form] = Form.useForm();
     
     const handleDeleteTask = async(id: number) => {
         try {
             await deleteTodo(id);
-            props.updateState();
-        } catch(err) {
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
+        } 
+        catch(err) {
             console.error(err)
         }
     }
 
     const handleStartEdit = () => {
         setIsEdit(true)
-        //form.setFieldsValue({edit: props.task.title})
-        
-        //console.log(form.getFieldValue('edit'), props.task.title)
     }
 
     const handleSaveChanges = async() => {
-
         const todo: TodoRequest = {
             isDone: props.task.isDone,
             title: form.getFieldValue('edit'),
             id: props.task.id
         }
         try {
-            await putTodo(todo)
-            await props.updateState()
+            dispatch(changeTask(todo))
+            await changeTodo(todo)
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
         }
         setIsEdit(false)
-        console.log(isEdit)
     }
 
     const handleChangeStatus = async() => {
@@ -59,8 +60,9 @@ const Task = (props: Props) => {
             id: props.task.id
         }
         try {
-            await putTodo(todo);
-            props.updateState()
+            dispatch(changeTaskStatus({isDone: todo.isDone || false, id: todo.id}))
+            await changeTodo(todo);
+            dispatch(getTaskList(stateTaskSelector.taskStatus))
         } catch(err) {
             console.error(err)
         }
@@ -68,8 +70,6 @@ const Task = (props: Props) => {
 
     const handleUndoChanges = () => {
         setIsEdit(false)
-        
-        console.log(props.task)
     }
 
     return (
@@ -81,9 +81,7 @@ const Task = (props: Props) => {
                         id="editingMode__form"
                         onFinish={handleSaveChanges}
                         onFinishFailed={() => console.log("asd")}
-                        //onFinish={props.task.title !== form.getFieldValue('edit') ? handleSaveChanges : () => void}
                         form={form}
-                        //initialValues={props.task.title}
                     >
                         <Flex className={styles.editingMode__txt}>
                             <Form.Item className={styles.formItem}>
@@ -96,7 +94,6 @@ const Task = (props: Props) => {
                                 name="edit" 
                                 label="" 
                                 className={styles.formItem}
-                                //initialValue={props.task.title}
                                 rules={[
                                     {
                                         required: true,
@@ -120,7 +117,6 @@ const Task = (props: Props) => {
                                 >
                                 <Input
                                     defaultValue={props.task.title}
-                                    //onChange={handleInput}
                                     autoFocus
                                     type="text"
                                     className={styles.editingMode__txt__input}
@@ -166,7 +162,6 @@ const Task = (props: Props) => {
                     <Flex className={styles.normalMode__btn}>
                         <Button
                             htmlType="button"
-                            //form="normalMode__form" 
                             icon={<EditTwoTone />}
                             onClick={handleStartEdit}
                             style={{fontSize: '150%', color:"green"}} 
@@ -174,7 +169,6 @@ const Task = (props: Props) => {
                         />
                         <Button
                             htmlType="button"
-                            //form="normalMode__form"
                             icon={<DeleteOutlined />} 
                             style={{fontSize: '150%', color: 'red'}}
                             onClick={() => handleDeleteTask(props.task.id)} 

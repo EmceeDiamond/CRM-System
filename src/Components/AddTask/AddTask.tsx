@@ -1,30 +1,44 @@
-import { postNewTodo } from "../../API/api";
+import { addNewTodo } from "../../API/api";
 import styles from './AddTask.module.css'
-import { Button, Form, Input, Flex } from 'antd';
+import { Button, Form, Input, Flex, notification } from 'antd';
 import { messageError, lenString } from "../ValidationParametrs";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../ReduxStore/store";
+import {  getTaskList } from "../../ReduxStore/Authorization/Slices/taskSlice";
 
-type PropsAddTask = {
-    getData: () => void
-}
+const AddTask = () => {
 
-const AddTask = (props: PropsAddTask) => {
     const [form] = Form.useForm();
+    const [error, contextHolder] = notification.useNotification();
+
+    const storeSelector = useSelector((state: RootState) => state.task);
+
+    const dispath: AppDispatch = useDispatch();
 
     const handleAddTask = async () => {
+
         const inputValue = form.getFieldValue('task')
+
         try {
-            await postNewTodo(inputValue)
-            await props.getData()
+            await addNewTodo(inputValue)
+            dispath(getTaskList(storeSelector.taskStatus))
         }
         catch(err) {
             console.error(err)
-            alert("Ошибка при добавлении новой задачи, попробуйте снова")
+            error.info({
+                message: "Ошибка!",
+                description: "Ошибка при добавлении новой задачи, попробуйте снова",
+                placement: "topRight",
+                duration: 7
+            });
         }
+        
         form.resetFields();
     }
 
     return (
         <Form onFinish={handleAddTask} form={form}>
+            {contextHolder}
             <Flex gap="large">
                 <Form.Item 
                     name="task" 

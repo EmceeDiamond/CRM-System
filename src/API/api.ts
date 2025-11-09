@@ -1,9 +1,9 @@
 import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
-import instance from "./apiInstance"
+import {instanceTask} from "./apiInstance"
 
 const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
-        const response = await instance({
+        const response = await instanceTask({
             url: `todos`,
             params: {
                 filter: filter
@@ -20,13 +20,13 @@ const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, To
     
 }
 
-const postNewTodo = async (title: string) => {
+const addNewTodo = async (title: string) => {
     const postData = {
         isDone: false,
         title: title
     }
     try {
-        const response = await instance({
+        const response = await instanceTask({
             url: 'todos',
             method: 'POST',
             data: postData,
@@ -42,7 +42,7 @@ const postNewTodo = async (title: string) => {
 
 const deleteTodo = async (id: number)=> {
     try {
-        const response = await instance({
+        const response = await instanceTask({
             url: `/todos/${id}`,
             method: 'DELETE'
         })
@@ -55,9 +55,9 @@ const deleteTodo = async (id: number)=> {
     }
 }
 
-const putTodo = async (todo: TodoRequest) => {
+const changeTodo = async (todo: TodoRequest) => {
     try {
-        const response = await instance({
+        const response = await instanceTask({
             url: `todos/${todo.id}`,
             method: 'PUT',
             data: todo
@@ -72,4 +72,4 @@ const putTodo = async (todo: TodoRequest) => {
     }
 }
 
-export {getTodosData, postNewTodo, deleteTodo, putTodo}
+export {getTodosData, addNewTodo, deleteTodo, changeTodo}
