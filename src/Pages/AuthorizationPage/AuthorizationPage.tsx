@@ -3,7 +3,7 @@ import logoImage from '../../Components/img/ImageOverForm.svg';
 import style from './AuthorizationPage.module.css';
 import { useNavigate } from "react-router-dom";
 import { authenticateUser } from "../../API/userApi";
-import { tokenManager } from "../../Components/AccessToken";
+import { tokenManager } from "../../shared/AccessToken";
 import { Token, dataAuthenticateUser } from "../../Types/Interfase";
 import { useDispatch } from "react-redux";
 import { toggleAuthenticated } from "../../ReduxStore/Authorization/Slices/authSlice";

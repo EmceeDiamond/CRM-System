@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { isAuthenticatedStatus, Profile } from '../../Types/Interfase';
 import style from './ProfilePage.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { RefreshAccessToken } from '../../Components/RefreshToken';
+import { refreshAccessToken } from '../../Components/RefreshToken';
 import { initializingAuth, logout } from '../../ReduxStore/Authorization/Slices/authSlice';
 import { RootState } from '../../ReduxStore/store';
-import { tokenManager } from '../../Components/AccessToken';
+import { tokenManager } from '../../shared/AccessToken';
 import { useNavigate } from 'react-router-dom';
 
 function ProfilePage() {
@@ -36,7 +36,7 @@ function ProfilePage() {
                 if (err.status === 401) {
                     if (selector.isAuthenticatedStatus === isAuthenticatedStatus.authenticated) {
                         dispatch(initializingAuth())
-                        const successRefreshToken = await RefreshAccessToken(dispatch);
+                        const successRefreshToken = await refreshAccessToken(dispatch);
 
                         if (successRefreshToken) {
                             getUserProfileData();

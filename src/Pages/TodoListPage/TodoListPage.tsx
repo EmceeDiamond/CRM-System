@@ -6,11 +6,11 @@ import AddTask from '../../Components/AddTask/AddTask'
 function TodoListPage() {
 
     return (
-    <div className={styles.main}>
-        <AddTask  />
-        <Filter />
-        <TaskList />
-    </div>
+        <div className={styles.main}>
+            <AddTask />
+            <Filter />
+            <TaskList />
+        </div>
     )
 }
 

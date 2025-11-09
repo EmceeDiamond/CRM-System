@@ -1,4 +1,4 @@
-import { tokenManager } from "../Components/AccessToken"
+import { tokenManager } from "../shared/AccessToken"
 import {instanceAuth} from "./apiInstance"
 import { PropsDataNewUser, PropsDataUser } from "../Types/Interfase"
 
