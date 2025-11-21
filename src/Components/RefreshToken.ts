@@ -1,6 +1,6 @@
 import { refreshToken } from "../API/userApi"
 import { tokenManager } from "../shared/AccessToken";
-import {toggleAuthenticated} from '../ReduxStore/Authorization/Slices/authSlice'
+import { toggleAuthenticated} from '../ReduxStore/Authorization/Slices/authSlice'
 import { Token } from "../Types/Interfase";
 import { AppDispatch } from "../ReduxStore/store";
 

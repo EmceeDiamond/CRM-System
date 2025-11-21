@@ -124,13 +124,46 @@ export type PropsDataUser = {
     password: string,
 }
 
-// export type TSliceMethod<
-//     Args = void,
-//     Result = unknown,
-//     RejectValue = unknown
-// > = AsyncThunk<Result, Args, { rejectValue: RejectValue }>;
+export interface UserFilters { 
+	search?: string;
+	sortBy?: string;
+	sortOrder?: 'asc' | 'desc';
+	isBlocked?: boolean;
+	limit?: number;
+	page?: number;
+}
 
-// export type TPaginationSliceMethod<
-//     Result = unknown,
-//     RejectValue = unknown
-// > = AsyncThunk<Result, { page: number; limit: number }, { rejectValue: RejectValue }>;
+export interface User {
+	id: number;
+	username: string;
+	email: string;
+	date: string; 
+	isBlocked: boolean;
+	roles: Roles[]; 
+	phoneNumber: string;
+}
+
+export interface MetaResponseUser<T> { 
+	data: T[]
+	meta: {   
+		totalAmount: number;   
+		sortBy: string;   
+		sortOrder: 'asc' | 'desc'; 
+	}
+}
+
+export interface UserRolesRequest {  
+	roles: Roles []
+}
+
+export interface UserRequest{  
+	username?: string; 
+	email?: string; 
+	phoneNumber?: string;
+}
+
+export enum Roles {
+	ADMIN = "ADMIN",
+	MODERATOR = "MODERATOR",
+	USER = "USER"
+}

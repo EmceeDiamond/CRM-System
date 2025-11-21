@@ -74,9 +74,7 @@ const getUserProfile = async () => {
                 'Authorization': `${tokenManager.getAccessToken()}`
             }
         })
-        console.log(response)
         if (response){
-            console.log(response)
             return response.data
         }
         

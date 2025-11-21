@@ -1,0 +1,19 @@
+.errMessageForUsers {
+    width: 100%;
+    padding-top: 20px;
+    height: 100vh;
+    align-items: center;
+}
+
+.errMessageForUsers__title {
+    font-weight: 700;
+    font-size: 36;
+    color: rgb(82, 82, 82);
+    margin: 0
+}
+
+.errMessageForUsers__paragraph {
+    font-weight: 400;
+    font-size: 16;
+    color: rgb(82, 82, 82);
+}

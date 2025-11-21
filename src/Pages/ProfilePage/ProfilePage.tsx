@@ -25,7 +25,6 @@ function ProfilePage() {
 
             try {
                 const data = await getUserProfile();
-
                 if (data) {
                     setUserProfileData(data)
                 }
@@ -44,7 +43,6 @@ function ProfilePage() {
                     }
                     
                 }
-                console.log(err.status)
             }
         }
         getUserProfileData()

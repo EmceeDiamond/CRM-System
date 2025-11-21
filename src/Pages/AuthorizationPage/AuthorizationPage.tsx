@@ -2,7 +2,7 @@ import { Button, Flex, Form, Input, Typography, Image, notification } from "antd
 import logoImage from '../../Components/img/ImageOverForm.svg';
 import style from './AuthorizationPage.module.css';
 import { useNavigate } from "react-router-dom";
-import { authenticateUser } from "../../API/userApi";
+import { authenticateUser, getUserProfile } from "../../API/userApi";
 import { tokenManager } from "../../shared/AccessToken";
 import { Token, dataAuthenticateUser } from "../../Types/Interfase";
 import { useDispatch } from "react-redux";
@@ -32,6 +32,7 @@ const AuthorizationPage = () => {
                 tokenManager.setAccessToken(tokens.accessToken)
                 localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken.toString())
                 dispatch(toggleAuthenticated(true))
+                await getUserProfile();
                 navigate('/main')
             }
             else {

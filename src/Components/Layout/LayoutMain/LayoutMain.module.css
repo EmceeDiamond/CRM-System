@@ -1,0 +1,8 @@
+.layoutMain {
+    position: relative;
+    min-height: 100vh;
+}
+
+.layoutContent {
+    margin-left: 200px;
+}
