@@ -59,6 +59,7 @@ const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserReq
             data: userChangeableData
         })
         const data: Promise <MetaResponseUser<User>> = await response.data;
+        console.log(response.status, response.data)
         return data;
         
     }
@@ -86,14 +87,14 @@ const deleteUserByAdmin = async (id: number) => {
 
 const blockUserByAdmin = async (id: number) => {
     try {
-        await instanceAuth({
+        const response = await instanceAuth({
             url: `admin/users/${id}/block`,
             method: 'POST',
             headers: {
                 'Authorization': `${tokenManager.getAccessToken()}`
             }
         })
-        
+        console.log(response.status, response.data)
     }
     catch (err){
         console.error('Failed Get Request');
@@ -104,7 +105,7 @@ const blockUserByAdmin = async (id: number) => {
 const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
-            url: `admin/users/${id}/block`,
+            url: `admin/users/${id}/rights`,
             method: 'POST',
             headers: {
                 'Authorization': `${tokenManager.getAccessToken()}`
@@ -112,7 +113,7 @@ const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Pro
             data: role
         })
         const data: Promise <MetaResponseUser<User>> = await response.data;
-        console.log(response.status)
+        console.log(response.status, response.data)
         return data;
     }
     catch (err){
@@ -130,6 +131,7 @@ const unblockUserByAdmin = async (id: number): Promise <MetaResponseUser<User>> 
                 'Authorization': `${tokenManager.getAccessToken()}`
             }
         })
+        console.log(response.status)
         const data: Promise <MetaResponseUser<User>> = await response.data;
         return data;
         

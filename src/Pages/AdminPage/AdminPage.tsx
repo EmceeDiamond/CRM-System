@@ -1,7 +1,7 @@
 import { Flex, Table, TableColumnsType, Space, Button, Modal, TableProps, Form, Input, Radio, Popover, Typography, Checkbox } from "antd"
 import { Roles, User, UserFilters, UserRolesRequest } from "../../Types/Interfase";
 import { useCallback, useEffect, useState } from "react";
-import { blockUserByAdmin, deleteUserByAdmin, getUsersByAdmin, updateUsersRightsByAdmin } from "../../API/adminApi";
+import { blockUserByAdmin, deleteUserByAdmin, getUsersByAdmin, unblockUserByAdmin, updateUsersRightsByAdmin } from "../../API/adminApi";
 import { ArrowRightOutlined, DeleteOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons'
 import style from './AdminPage.module.css'
 import { refreshAccessToken } from "../../Components/RefreshToken";
@@ -105,7 +105,6 @@ const AdminPage = () => {
     }
 
     const handleBlockOrUnblockUserModalWindow = (user: User) => {
-        
         const userIsBlocked: string = user.isBlocked ? "разблокировать" : "заблокировать"
         modalWindow.confirm({
             title: `Потвердите действие`,
@@ -114,7 +113,14 @@ const AdminPage = () => {
             okType: 'danger',
             cancelText: 'Нет',
             onOk(){
-                handleBlockOrUnblockUser(user.id)
+                console.log(user.isBlocked)
+                if (user.isBlocked) {
+                    console.log(1)
+                    handleUnblockUser(user.id) 
+                }
+                else {
+                    handleBlockUser(user.id)
+                }
             },
             onCancel() {
                 console.log('Cancel')
@@ -123,9 +129,24 @@ const AdminPage = () => {
         
     }
 
-    const handleBlockOrUnblockUser = async(userId: number) => {
+    const handleBlockUser = async(userId: number) => {
         try {
             await blockUserByAdmin(userId)
+            getUsersProfile()
+        } 
+        catch(err) {
+            const error = err as {status: number} 
+
+            if (error.status === 401){ 
+                refreshAccessToken(dispatch)
+            }
+            console.error(err)
+        }
+    }
+
+    const handleUnblockUser = async(userId: number) => {
+        try {
+            await unblockUserByAdmin(userId)
             getUsersProfile()
         } 
         catch(err) {
@@ -258,6 +279,7 @@ const AdminPage = () => {
             <Space direction="vertical">
                 <Checkbox value={Roles.ADMIN}>Admin</Checkbox>
                 <Checkbox value={Roles.MODERATOR}>Moderator</Checkbox>
+                <Checkbox value={Roles.USER}>User</Checkbox>
             </Space>
             <Button onClick={() => handleUpdateUsersRightsModalWindow(record)}>Применить</Button>
         </Checkbox.Group>)
@@ -313,7 +335,7 @@ const AdminPage = () => {
                                     value={searchValue}
                                     onChange={(e) => setSearchValue(e.target.value)}
                                     onPressEnter={handleSearchUsers}
-                                    allowClear/>
+                                    />
                             </Form.Item>
                             <Form.Item>
                                 <Button htmlType="submit" icon={<SearchOutlined />} className={style.adminPage__search_btn}>Поиск</Button>

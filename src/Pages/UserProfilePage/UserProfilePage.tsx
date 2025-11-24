@@ -1,5 +1,5 @@
 import { Button, Flex, Form, Input, notification, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserProfileByAdmin } from '../../API/adminApi';
 import { User } from '../../Types/Interfase';
@@ -21,36 +21,41 @@ function UserProfilePage() {
     const [userProfileData, setUserProfileData] = useState<User>();
     const [editingMode, setEditingMode] = useState<boolean>(false);
     const [accessRights, setAccessRights] = useState<boolean>(true);
+    const [changeUserData, setChangeUserData] = useState<UserRequest>({
+        username: userProfileData?.username,
+        email: userProfileData?.email,
+        phoneNumber: userProfileData?.phoneNumber
+    })
 
-    useEffect(() => {
-        const getUserProfileData = async () => {
-
-            try {
-                const data = await getUserProfileByAdmin(Number(userId));
-                if (data) {
-                    setUserProfileData(data)
-                }
-            }
-            catch(err) {
-                const error = err as { status: number };
-
-                if (error.status === 401) {
-                    await refreshAccessToken(dispatch);
-                }
-
-                if (error.status === 403){ 
-                    setAccessRights(false)
-                    errorAlert.info({
-                        message: "Ошибка!",
-                        description: "Недостаточно прав для просмотра данных пользователей",
-                        placement: "topRight",
-                        duration: 7
-                    });
-            }
+    const getUserProfileData =  useCallback(async() => {
+        try {
+            const data = await getUserProfileByAdmin(Number(userId));
+            if (data) {
+                setUserProfileData(data)
             }
         }
+        catch(err) {
+            const error = err as { status: number };
+
+            if (error.status === 401) {
+                await refreshAccessToken(dispatch);
+            }
+
+            if (error.status === 403){ 
+                setAccessRights(false)
+                errorAlert.info({
+                    message: "Ошибка!",
+                    description: "Недостаточно прав для просмотра данных пользователей",
+                    placement: "topRight",
+                    duration: 7
+                });
+        }
+        }
+    }, [dispatch, errorAlert, userId])
+
+    useEffect(() => {
         getUserProfileData()
-    }, [dispatch, userId, errorAlert])
+    }, [getUserProfileData])
 
     const handleBackToTable = () => {
         navigate('/admin')
@@ -67,6 +72,7 @@ function UserProfilePage() {
     const handleSaveChangeUserData = async(values: UserRequest) => {
         try {
             await updateUsersProfileByAdmin(Number(userId), values) 
+            await getUserProfileData()
         }
         catch(err) {
             const error = err as {status: number} 
@@ -94,6 +100,7 @@ function UserProfilePage() {
             }
             console.error(err)
         }
+        setEditingMode(false)
     }
 
     return (
@@ -106,19 +113,31 @@ function UserProfilePage() {
                 justify='space-between'
                 >
                     <Form 
-                    onFinish={(values) =>handleSaveChangeUserData(values)}
+                    onFinish={handleSaveChangeUserData}
                     onReset={handleCanselEditingMode}>
                         <Form.Item
+                        name='username'
                         label='Username'>
-                            <Input value={userProfileData?.username}/>
+                            <Input
+                            defaultValue={userProfileData?.username}
+                            value={changeUserData.username}
+                            onChange={(e) => setChangeUserData({...changeUserData, username: e.target.value})}/>
                         </Form.Item>
                         <Form.Item
+                        name='email'
                         label='Email'>
-                            <Input value={userProfileData?.email}/>
+                            <Input 
+                            defaultValue={userProfileData?.email}
+                            value={changeUserData.email}
+                            onChange={(e) => setChangeUserData({...changeUserData, email: e.target.value})}/>
                         </Form.Item>
                         <Form.Item
+                        name='phoneNumber'
                         label='Phone Number'>
-                            <Input value={userProfileData?.phoneNumber}/>
+                            <Input 
+                            defaultValue={userProfileData?.phoneNumber}
+                            value={changeUserData.phoneNumber}
+                            onChange={(e) => setChangeUserData({...changeUserData, phoneNumber: e.target.value})}/>
                         </Form.Item>
                         <Flex gap={30}>
                             <Form.Item>
