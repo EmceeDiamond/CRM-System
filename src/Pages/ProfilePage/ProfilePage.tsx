@@ -77,7 +77,8 @@ function ProfilePage() {
             </Form>
             <Button 
                 type="text"
-                onClick={handlelogoutUser}>Logout</Button>
+                onClick={handlelogoutUser}>Logout
+            </Button>
         </Flex>
         
     )

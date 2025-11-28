@@ -24,6 +24,7 @@ const AdminPage = () => {
     });
     const [accessRights, setAccessRights] = useState<boolean>(true);
     const [usersRigths, setUsersRights] = useState<Roles[]>([Roles.USER]);
+    const [parametrsGetRequest, setParametrsGetRequest] = useState<UserFilters>({})
 
     const dispatch = useDispatch();
 
@@ -31,6 +32,7 @@ const AdminPage = () => {
 
         try {
             await deleteUserByAdmin(id)
+            getUsersProfile(parametrsGetRequest)
         }
         catch(err) {
             const error = err as {status: number} 
@@ -74,6 +76,11 @@ const AdminPage = () => {
                     sortBy: String(sorter.column?.dataIndex),
                     sortOrder: sorter.order?.includes('asc') ? 'asc' : 'desc'
                 })
+                setParametrsGetRequest(state => ({
+                    ...state,
+                    sortBy: String(sorter.column?.dataIndex),
+                    sortOrder: sorter.order?.includes('asc') ? 'asc' : 'desc'
+                }))
             }
         }
 
@@ -82,6 +89,11 @@ const AdminPage = () => {
             getUsersProfile({
                 page: Number(_pagination.current) - 1
             })
+
+            setParametrsGetRequest(state => ({
+                ...state,
+                page: Number(_pagination.current) - 1
+            }))
 
             setPagination(state => ({
                 ...state,
@@ -94,14 +106,22 @@ const AdminPage = () => {
         getUsersProfile({
             search: searchValue
         })
+
+        setParametrsGetRequest(state => ({
+            ...state,
+            search: searchValue
+        }))
     }   
 
     const handleFilterUsers = (selectedFilterValue: string) => {
-        console.log("filter", selectedFilterValue)
         getUsersProfile({
-            isBlocked: selectedFilterValue === "active" ? true : selectedFilterValue === "blocked" ? false : undefined
+            isBlocked: selectedFilterValue === "active" ? false : selectedFilterValue === "blocked" ? true : undefined
         })
-        console.log("filter", selectedFilterValue, selectedFilterValue === "active" ? true : selectedFilterValue === "blocked" ? false : undefined)
+        
+        setParametrsGetRequest(state => ({
+            ...state,
+            isBlocked: selectedFilterValue === "active" ? false : selectedFilterValue === "blocked" ? true : undefined
+        }))
     }
 
     const handleBlockOrUnblockUserModalWindow = (user: User) => {
@@ -132,7 +152,7 @@ const AdminPage = () => {
     const handleBlockUser = async(userId: number) => {
         try {
             await blockUserByAdmin(userId)
-            getUsersProfile()
+            getUsersProfile(parametrsGetRequest)
         } 
         catch(err) {
             const error = err as {status: number} 
@@ -147,7 +167,7 @@ const AdminPage = () => {
     const handleUnblockUser = async(userId: number) => {
         try {
             await unblockUserByAdmin(userId)
-            getUsersProfile()
+            getUsersProfile(parametrsGetRequest)
         } 
         catch(err) {
             const error = err as {status: number} 
@@ -186,7 +206,7 @@ const AdminPage = () => {
         }
         try {
             await updateUsersRightsByAdmin(userId, userRequsetRights)
-            getUsersProfile()
+            getUsersProfile(parametrsGetRequest)
         }
         catch(err) {
             const error = err as {status: number} 
@@ -227,9 +247,9 @@ const AdminPage = () => {
                 <Flex 
                 justify="space-between"
                 gap="10px">
-                    <Paragraph style={{margin: "0"}}>{value}</Paragraph>
+                    <Paragraph style={{margin: "0"}}>{value.join(" ")}</Paragraph>
                     <Popover content={checkboxGroup(value, record)} trigger="click">
-                        <Button icon={<PlusOutlined />} />
+                        <Button icon={<PlusOutlined />} color="cyan" style={{width: "30px"}}/>
                     </Popover>
                 </Flex>
             )
@@ -239,11 +259,10 @@ const AdminPage = () => {
             dataIndex: 'phoneNumber',
         },
         {
-            title: 'Actions',
             render: (record) => (
                 <Space size="middle">
-                    <Button variant="outlined" icon={<DeleteOutlined />} onClick={() => handleRepeatConfirmation(record)}/>
-                    <Button variant="outlined" icon={<ArrowRightOutlined />} onClick={() => handleGetUserProfile(record.id)}/>
+                    <Button variant="outlined" danger icon={<DeleteOutlined />} onClick={() => handleRepeatConfirmation(record)}/>
+                    <Button variant="outlined" color="blue" icon={<ArrowRightOutlined />} onClick={() => handleGetUserProfile(record.id)}/>
                     <Button onClick={() => handleBlockOrUnblockUserModalWindow(record)}>{record.isBlocked ? "Разблок" : "Блок"}</Button>
                 </Space>
             )
