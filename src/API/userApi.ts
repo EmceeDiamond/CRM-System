@@ -1,10 +1,9 @@
-import { tokenManager } from "../shared/AccessToken"
-import {instanceAuth} from "./apiInstance"
-import { PropsDataNewUser, PropsDataUser } from "../Types/Interfase"
+import { instanceAuth, instance } from "./apiInstance"
+import { PropsDataNewUser, PropsDataUser } from "../Types/types"
 
 const registerNewUser = async (dataNewUser: PropsDataNewUser) => {
     try {
-        const response = await instanceAuth({
+        const response = await instance({
             url: 'auth/signup',
             method: 'POST',
             data: dataNewUser,
@@ -19,7 +18,7 @@ const registerNewUser = async (dataNewUser: PropsDataNewUser) => {
 
 const authenticateUser = async (dataUser: PropsDataUser) => {
     try {
-        const response = await instanceAuth({
+        const response = await instance({
             url: 'auth/signin',
             method: 'POST',
             data: dataUser,
@@ -37,9 +36,6 @@ const logoutUser = async () => {
         const response = await instanceAuth({
             url: 'user/logout',
             method: 'POST',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
         },)
         if (!response){
             throw new Error ()
@@ -52,7 +48,7 @@ const logoutUser = async () => {
 
 const refreshToken = async (refresh: string) => {
     try {
-        const response = await instanceAuth({
+        const response = await instance({
             url: 'auth/refresh',
             method: 'POST',
             data: {refreshToken: refresh}
@@ -69,10 +65,7 @@ const getUserProfile = async () => {
     try {
         const response = await instanceAuth({
             url: 'user/profile',
-            method: 'GET',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
+            method: 'GET'
         })
         if (response){
             return response.data

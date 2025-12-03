@@ -1,4 +1,4 @@
-import { IAsyncParticle } from '../Types/Interfase';
+import { IAsyncParticle } from '../Types/types';
 import { ActionReducerMapBuilder, Draft, AsyncThunk } from '@reduxjs/toolkit';
 
 export const initAsyncParticle = <T>(data: T | undefined = undefined): IAsyncParticle<T> => ({

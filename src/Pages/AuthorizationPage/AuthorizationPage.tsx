@@ -4,7 +4,7 @@ import style from './AuthorizationPage.module.css';
 import { useNavigate } from "react-router-dom";
 import { authenticateUser, getUserProfile } from "../../API/userApi";
 import { tokenManager } from "../../shared/AccessToken";
-import { Token, dataAuthenticateUser } from "../../Types/Interfase";
+import { Token, dataAuthenticateUser } from "../../Types/types";
 import { useDispatch } from "react-redux";
 import { toggleAuthenticated } from "../../ReduxStore/Authorization/Slices/authSlice";
 import { REFRESH_TOKEN_KEY } from "../../Components/RefreshToken";
@@ -56,8 +56,6 @@ const AuthorizationPage = () => {
                     duration: 7
                 });
             }
-            
-            console.error(err)
         }
         form.resetFields()
     }

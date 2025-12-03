@@ -1,5 +1,5 @@
 import { Flex, Table, TableColumnsType, Space, Button, Modal, TableProps, Form, Input, Radio, Popover, Typography, Checkbox } from "antd"
-import { Roles, User, UserFilters, UserRolesRequest } from "../../Types/Interfase";
+import { PaginationData, Roles, User, UserFilters, UserRolesRequest } from "../../Types/types";
 import { useCallback, useEffect, useState } from "react";
 import { blockUserByAdmin, deleteUserByAdmin, getUsersByAdmin, unblockUserByAdmin, updateUsersRightsByAdmin } from "../../API/adminApi";
 import { ArrowRightOutlined, DeleteOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons'
@@ -17,7 +17,7 @@ const AdminPage = () => {
     const [dataUsersProfile, setDataUsersProfile] = useState<User[]>();
     const [modalWindow, contextHolder] = Modal.useModal()
     const [searchValue, setSearchValue] = useState<string>('');
-    const [pagination, setPagination] = useState({
+    const [pagination, setPagination] = useState<PaginationData>({
         current: 1,
         pageSize: 20,
         total: 0
@@ -40,7 +40,6 @@ const AdminPage = () => {
             if (error.status === 401){ 
                 refreshAccessToken(dispatch)
             }
-            console.error(err)
         }
     }
 
@@ -60,7 +59,7 @@ const AdminPage = () => {
         });
     }
 
-    const handleGetUserProfile = async(id: number) => {
+    const handleGetUserProfile = (id: number) => {
         navigate(`/admin/profile/${id}`)
     }
 
@@ -71,7 +70,6 @@ const AdminPage = () => {
 
         if (_pagination.current === pagination.current && _pagination.pageSize === pagination.pageSize) {
             if (!Array.isArray(sorter)){
-                console.log("=")
                 getUsersProfile({
                     sortBy: String(sorter.column?.dataIndex),
                     sortOrder: sorter.order?.includes('asc') ? 'asc' : 'desc'
@@ -85,7 +83,6 @@ const AdminPage = () => {
         }
 
         else {
-            console.log(">")
             getUsersProfile({
                 page: Number(_pagination.current) - 1
             })
@@ -133,9 +130,7 @@ const AdminPage = () => {
             okType: 'danger',
             cancelText: 'Нет',
             onOk(){
-                console.log(user.isBlocked)
                 if (user.isBlocked) {
-                    console.log(1)
                     handleUnblockUser(user.id) 
                 }
                 else {
@@ -160,7 +155,6 @@ const AdminPage = () => {
             if (error.status === 401){ 
                 refreshAccessToken(dispatch)
             }
-            console.error(err)
         }
     }
 
@@ -175,7 +169,6 @@ const AdminPage = () => {
             if (error.status === 401){ 
                 refreshAccessToken(dispatch)
             }
-            console.error(err)
         }
     }
 
@@ -214,7 +207,6 @@ const AdminPage = () => {
             if (error.status === 401){ 
                 refreshAccessToken(dispatch)
             }
-            console.error(err)
         }
     }
 
@@ -320,7 +312,6 @@ const AdminPage = () => {
                 ...state,
                 total: dataUsers.meta.totalAmount
             }))
-            console.log(dataUsers)
         } 
         catch(err) {
             const error = err as {status: number} 
@@ -331,7 +322,6 @@ const AdminPage = () => {
             if (error.status === 403){
                 setAccessRights(false)
             }
-            console.error(err)
         }
     }, [dispatch])
 

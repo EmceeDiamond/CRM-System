@@ -1,7 +1,7 @@
 import { Button, Flex, Form } from 'antd';
 import { getUserProfile, logoutUser } from '../../API/userApi';
 import { useEffect, useState } from 'react';
-import { isAuthenticatedStatus, Profile } from '../../Types/Interfase';
+import { isAuthenticatedStatus, Profile } from '../../Types/types';
 import style from './ProfilePage.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { refreshAccessToken } from '../../Components/RefreshToken';

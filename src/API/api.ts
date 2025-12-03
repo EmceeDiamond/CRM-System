@@ -1,9 +1,9 @@
-import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/Interfase"
-import {instanceTask} from "./apiInstance"
+import { MetaResponse, Todo, TodoInfo, TodoRequest,  FilterStatus} from "../Types/types"
+import { instance } from "./apiInstance"
 
 const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, TodoInfo>> => {
     try {
-        const response = await instanceTask({
+        const response = await instance({
             url: `todos`,
             params: {
                 filter: filter
@@ -26,7 +26,7 @@ const addNewTodo = async (title: string) => {
         title: title
     }
     try {
-        const response = await instanceTask({
+        const response = await instance({
             url: 'todos',
             method: 'POST',
             data: postData,
@@ -42,33 +42,26 @@ const addNewTodo = async (title: string) => {
 
 const deleteTodo = async (id: number)=> {
     try {
-        const response = await instanceTask({
+        await instance({
             url: `/todos/${id}`,
             method: 'DELETE'
         })
-        if (!response) {
-            throw new Error ()
-        }
     }
-    catch {
-        console.error('Failed Delet Request')
+    catch(err) {
+        console.error(err)
     }
 }
 
 const changeTodo = async (todo: TodoRequest) => {
     try {
-        const response = await instanceTask({
+        await instance({
             url: `todos/${todo.id}`,
             method: 'PUT',
             data: todo
         })
-        if (!response) {
-            throw new Error ()
-        }
-        
     }
-    catch {
-        console.error('Failed Put Request')
+    catch(err) {
+        console.error(err)
     }
 }
 

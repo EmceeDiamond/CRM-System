@@ -1,15 +1,11 @@
 import { instanceAuth } from "./apiInstance";
-import { tokenManager } from "../shared/AccessToken";
-import { MetaResponseUser, User, UserFilters, UserRequest, UserRolesRequest } from "../Types/Interfase";
+import { MetaResponseUser, User, UserFilters, UserRequest, UserRolesRequest } from "../Types/types";
 
 const getUsersByAdmin = async (filter: UserFilters): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
             url: 'admin/users',
             method: 'GET',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            },
             params: {
                 search: filter.search,
                 sortBy: filter.sortBy,
@@ -34,9 +30,7 @@ const getUserProfileByAdmin = async (id: number): Promise <User> => {
         const response = await instanceAuth({
             url: `admin/users/${id}`,
             method: 'GET',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
+
         })
         const data: Promise <User> = await response.data;
         return data;
@@ -53,9 +47,6 @@ const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserReq
         const response = await instanceAuth({
             url: `admin/users/${id}`,
             method: 'PUT',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            },
             data: userChangeableData
         })
         const data: Promise <MetaResponseUser<User>> = await response.data;
@@ -74,9 +65,6 @@ const deleteUserByAdmin = async (id: number) => {
         await instanceAuth({
             url: `admin/users/${id}`,
             method: 'DELETE',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
         })
     }
     catch (err){
@@ -90,9 +78,6 @@ const blockUserByAdmin = async (id: number) => {
         const response = await instanceAuth({
             url: `admin/users/${id}/block`,
             method: 'POST',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
         })
         console.log(response.status, response.data)
     }
@@ -107,9 +92,6 @@ const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Pro
         const response = await instanceAuth({
             url: `admin/users/${id}/rights`,
             method: 'POST',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            },
             data: role
         })
         const data: Promise <MetaResponseUser<User>> = await response.data;
@@ -127,9 +109,6 @@ const unblockUserByAdmin = async (id: number): Promise <MetaResponseUser<User>> 
         const response = await instanceAuth({
             url: `admin/users/${id}/unblock`,
             method: 'POST',
-            headers: {
-                'Authorization': `${tokenManager.getAccessToken()}`
-            }
         })
         console.log(response.status)
         const data: Promise <MetaResponseUser<User>> = await response.data;

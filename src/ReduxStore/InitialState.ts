@@ -1,4 +1,4 @@
-import { TaskState, FilterStatus, isAuthenticatedStatus, AuthState, AsyncTaskData } from "../Types/Interfase"
+import { TaskState, FilterStatus, isAuthenticatedStatus, AuthState, AsyncTaskData } from "../Types/types"
 import { initAsyncParticle } from "./Utils";
 
 export const initialStateTaskSlice: TaskState = {

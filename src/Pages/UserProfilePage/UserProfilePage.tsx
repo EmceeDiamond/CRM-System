@@ -2,11 +2,11 @@ import { Button, Flex, Form, Input, notification, Typography } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserProfileByAdmin } from '../../API/adminApi';
-import { User } from '../../Types/Interfase';
+import { User } from '../../Types/types';
 import { useDispatch } from 'react-redux';
 import { updateUsersProfileByAdmin } from '../../API/adminApi';
 import style from './UserProfilePage.module.css'
-import { UserRequest } from '../../Types/Interfase';
+import { UserRequest } from '../../Types/types';
 import { refreshAccessToken } from '../../Components/RefreshToken';
 
 const {Title, Paragraph} = Typography;
@@ -21,11 +21,6 @@ function UserProfilePage() {
     const [userProfileData, setUserProfileData] = useState<User>();
     const [editingMode, setEditingMode] = useState<boolean>(false);
     const [accessRights, setAccessRights] = useState<boolean>(true);
-    const [changeUserData, setChangeUserData] = useState<UserRequest>({
-        username: userProfileData?.username,
-        email: userProfileData?.email,
-        phoneNumber: userProfileData?.phoneNumber
-    })
 
     const getUserProfileData =  useCallback(async() => {
         try {
@@ -49,7 +44,7 @@ function UserProfilePage() {
                     placement: "topRight",
                     duration: 7
                 });
-        }
+            }
         }
     }, [dispatch, errorAlert, userId])
 
@@ -98,7 +93,6 @@ function UserProfilePage() {
                     duration: 7
                 });
             }
-            console.error(err)
         }
         setEditingMode(false)
     }
@@ -120,24 +114,21 @@ function UserProfilePage() {
                         label='Username'>
                             <Input
                             defaultValue={userProfileData?.username}
-                            value={changeUserData.username}
-                            onChange={(e) => setChangeUserData({...changeUserData, username: e.target.value})}/>
+                            />
                         </Form.Item>
                         <Form.Item
                         name='email'
                         label='Email'>
                             <Input 
                             defaultValue={userProfileData?.email}
-                            value={changeUserData.email}
-                            onChange={(e) => setChangeUserData({...changeUserData, email: e.target.value})}/>
+                            />
                         </Form.Item>
                         <Form.Item
                         name='phoneNumber'
                         label='Phone Number'>
                             <Input 
                             defaultValue={userProfileData?.phoneNumber}
-                            value={changeUserData.phoneNumber}
-                            onChange={(e) => setChangeUserData({...changeUserData, phoneNumber: e.target.value})}/>
+                            />
                         </Form.Item>
                         <Flex gap={30}>
                             <Form.Item>

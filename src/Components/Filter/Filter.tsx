@@ -1,5 +1,5 @@
 import styles from './Filter.module.css'
-import { FilterStatus } from "../../Types/Interfase"
+import { FilterStatus } from "../../Types/types"
 import { Flex, Button } from "antd"
 import { RootState } from "../../ReduxStore/store"
 import { useDispatch, useSelector } from "react-redux"

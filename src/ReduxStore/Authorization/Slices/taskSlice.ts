@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FilterStatus, TodoRequest} from "../../../Types/Interfase";
+import { FilterStatus, TodoRequest} from "../../../Types/types";
 import { initialStateTaskSlice } from "../../InitialState";
 import { getTodosData } from "../../../API/api";
 import { addAsyncBuilderCases } from "../../Utils";

@@ -1,7 +1,7 @@
 import { refreshToken } from "../API/userApi"
 import { tokenManager } from "../shared/AccessToken";
 import { toggleAuthenticated} from '../ReduxStore/Authorization/Slices/authSlice'
-import { Token } from "../Types/Interfase";
+import { Token } from "../Types/types";
 import { AppDispatch } from "../ReduxStore/store";
 
 export const REFRESH_TOKEN_KEY = 'refreshKey'

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { isAuthenticatedStatus } from '../../../Types/Interfase';
+import { isAuthenticatedStatus } from '../../../Types/types';
 import { initialStateAuthSlice } from '../../InitialState';
 
 const authSlice = createSlice({

@@ -4,7 +4,7 @@ import style from './RegistrationPage.module.css'
 import { registerNewUser } from "../../API/userApi";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { NewUser } from "../../Types/Interfase.js";
+import { NewUser } from "../../Types/types.js";
 
 const {Title, Paragraph, Text} = Typography
 

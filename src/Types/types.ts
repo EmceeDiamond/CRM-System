@@ -105,6 +105,12 @@ export interface IAsyncDataStatus {
     isLoadedOrError: boolean;
 }
 
+export type PaginationData = {
+    current: number,
+    pageSize: number,
+    total: number
+}
+
 export interface IErrorData {
     message: string;
     code?: number | string;
