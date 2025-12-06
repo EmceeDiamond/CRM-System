@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Input, notification, Typography } from 'antd';
+import { Button, Flex, Form, Input, notification, Typography, Descriptions } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserProfileByAdmin } from '../../API/adminApi';
@@ -22,7 +22,7 @@ function UserProfilePage() {
     const [editingMode, setEditingMode] = useState<boolean>(false);
     const [accessRights, setAccessRights] = useState<boolean>(true);
 
-    const getUserProfileData =  useCallback(async() => {
+    const getUserProfileData =  useCallback(async(): Promise <void> => {
         try {
             const data = await getUserProfileByAdmin(Number(userId));
             if (data) {
@@ -52,19 +52,19 @@ function UserProfilePage() {
         getUserProfileData()
     }, [getUserProfileData])
 
-    const handleBackToTable = () => {
+    const handleBackToTable = (): void => {
         navigate('/admin')
     }
 
-    const handleStartEditingMode = () => {
+    const handleStartEditingMode = (): void => {
         setEditingMode(true)
     }
 
-    const handleCanselEditingMode = () => {
+    const handleCanselEditingMode = (): void => {
         setEditingMode(false)
     }
 
-    const handleSaveChangeUserData = async(values: UserRequest) => {
+    const handleSaveChangeUserData = async(values: UserRequest): Promise <void> => {
         try {
             await updateUsersProfileByAdmin(Number(userId), values) 
             await getUserProfileData()
@@ -146,23 +146,23 @@ function UserProfilePage() {
                 <Flex 
                 justify='space-between'
                 >
-                    <Form onFinish={handleStartEditingMode}>
-                        <Form.Item
+                    <Descriptions>
+                        <Descriptions.Item
                         label='Username'>
                             {userProfileData?.username}
-                        </Form.Item>
-                        <Form.Item
+                        </Descriptions.Item>
+                        <Descriptions.Item
                         label='Email'>
                             {userProfileData?.email}
-                        </Form.Item>
-                        <Form.Item
+                        </Descriptions.Item>
+                        <Descriptions.Item
                         label='Phone Number'>
-                            {userProfileData?.phoneNumber}
-                        </Form.Item>
-                        <Form.Item>
-                            <Button htmlType='submit'>Редактировать</Button>
-                        </Form.Item>
-                    </Form>
+                            {userProfileData?.phoneNumber === undefined ? "-" : userProfileData?.phoneNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item>
+                            <Button htmlType='submit' onClick={handleStartEditingMode}>Редактировать</Button>
+                        </Descriptions.Item>
+                    </Descriptions>
                     <Button onClick={handleBackToTable}>Вернуться</Button>
                 </Flex>
                 :

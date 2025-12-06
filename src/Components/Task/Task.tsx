@@ -24,7 +24,7 @@ const Task = (props: Props) => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [form] = Form.useForm();
     
-    const handleDeleteTask = async(id: number) => {
+    const handleDeleteTask = async(id: number): Promise <void> => {
         try {
             await deleteTodo(id);
             dispatch(getTaskList(stateTaskSelector.taskStatus))
@@ -39,11 +39,11 @@ const Task = (props: Props) => {
         }
     }
 
-    const handleStartEdit = () => {
+    const handleStartEdit = (): void => {
         setIsEdit(true)
     }
 
-    const handleSaveChanges = async() => {
+    const handleSaveChanges = async(): Promise <void> => {
         const todo: TodoRequest = {
             isDone: props.task.isDone,
             title: form.getFieldValue('edit'),
@@ -65,7 +65,7 @@ const Task = (props: Props) => {
         setIsEdit(false)
     }
 
-    const handleChangeStatus = async() => {
+    const handleChangeStatus = async(): Promise <void> => {
         const todo: TodoRequest = {
             isDone: !props.task.isDone,
             title: props.task.title,
@@ -86,7 +86,7 @@ const Task = (props: Props) => {
         }
     }
 
-    const handleUndoChanges = () => {
+    const handleUndoChanges = (): void => {
         setIsEdit(false)
     }
 

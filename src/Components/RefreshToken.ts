@@ -6,7 +6,7 @@ import { AppDispatch } from "../ReduxStore/store";
 
 export const REFRESH_TOKEN_KEY = 'refreshKey'
 
-export const refreshAccessToken = async (dispatch: AppDispatch) => {
+export const refreshAccessToken = async (dispatch: AppDispatch): Promise <boolean | void>=> {
     
     try {
         const data: Token = await refreshToken(localStorage.getItem(REFRESH_TOKEN_KEY) || "");

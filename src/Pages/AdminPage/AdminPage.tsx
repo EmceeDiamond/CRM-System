@@ -1,6 +1,6 @@
 import { Flex, Table, TableColumnsType, Space, Button, Modal, TableProps, Form, Input, Radio, Popover, Typography, Checkbox } from "antd"
 import { PaginationData, Roles, User, UserFilters, UserRolesRequest } from "../../Types/types";
-import { useCallback, useEffect, useState } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import { blockUserByAdmin, deleteUserByAdmin, getUsersByAdmin, unblockUserByAdmin, updateUsersRightsByAdmin } from "../../API/adminApi";
 import { ArrowRightOutlined, DeleteOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons'
 import style from './AdminPage.module.css'
@@ -28,7 +28,7 @@ const AdminPage = () => {
 
     const dispatch = useDispatch();
 
-    const handleDeleteUser = async(id: number) => {
+    const handleDeleteUser = async(id: number): Promise <void> => {
 
         try {
             await deleteUserByAdmin(id)
@@ -43,7 +43,7 @@ const AdminPage = () => {
         }
     }
 
-    const handleRepeatConfirmation = (user: User) => {
+    const handleRepeatConfirmation = (user: User): void => {
         modalWindow.confirm({
             title: 'Удалить пользователя',
             content: `Вы действительно хотите удалить пользователя ${user.username}`,
@@ -59,7 +59,7 @@ const AdminPage = () => {
         });
     }
 
-    const handleGetUserProfile = (id: number) => {
+    const handleGetUserProfile = (id: number): void => {
         navigate(`/admin/profile/${id}`)
     }
 
@@ -99,7 +99,7 @@ const AdminPage = () => {
         }
     }  
 
-    const handleSearchUsers = () => {
+    const handleSearchUsers = (): void => {
         getUsersProfile({
             search: searchValue
         })
@@ -110,7 +110,7 @@ const AdminPage = () => {
         }))
     }   
 
-    const handleFilterUsers = (selectedFilterValue: string) => {
+    const handleFilterUsers = (selectedFilterValue: string): void => {
         getUsersProfile({
             isBlocked: selectedFilterValue === "active" ? false : selectedFilterValue === "blocked" ? true : undefined
         })
@@ -121,7 +121,7 @@ const AdminPage = () => {
         }))
     }
 
-    const handleBlockOrUnblockUserModalWindow = (user: User) => {
+    const handleBlockOrUnblockUserModalWindow = (user: User): void => {
         const userIsBlocked: string = user.isBlocked ? "разблокировать" : "заблокировать"
         modalWindow.confirm({
             title: `Потвердите действие`,
@@ -144,7 +144,7 @@ const AdminPage = () => {
         
     }
 
-    const handleBlockUser = async(userId: number) => {
+    const handleBlockUser = async(userId: number): Promise <void> => {
         try {
             await blockUserByAdmin(userId)
             getUsersProfile(parametrsGetRequest)
@@ -158,7 +158,7 @@ const AdminPage = () => {
         }
     }
 
-    const handleUnblockUser = async(userId: number) => {
+    const handleUnblockUser = async(userId: number): Promise <void> => {
         try {
             await unblockUserByAdmin(userId)
             getUsersProfile(parametrsGetRequest)
@@ -172,11 +172,11 @@ const AdminPage = () => {
         }
     }
 
-    const handleChangeUsersRights = (rights: Roles[]) => {
+    const handleChangeUsersRights = (rights: Roles[]): void => {
         setUsersRights(rights)
     }
 
-    const handleUpdateUsersRightsModalWindow = (user: User) => {
+    const handleUpdateUsersRightsModalWindow = (user: User): void => {
 
         modalWindow.confirm({
             title: `Изменение прав`,
@@ -193,7 +193,7 @@ const AdminPage = () => {
         });
     }
 
-    const handleUpdateUsersRights = async(userId: number) => {
+    const handleUpdateUsersRights = async(userId: number): Promise <void> => {
         const userRequsetRights: UserRolesRequest = {
             roles: usersRigths
         }
@@ -208,6 +208,24 @@ const AdminPage = () => {
                 refreshAccessToken(dispatch)
             }
         }
+    }
+    
+    const checkboxGroup = (value: Roles[], record: User): JSX.Element => {
+        return (
+        <Checkbox.Group
+        onChange={(e) => {
+            handleChangeUsersRights(e)
+        }}
+        defaultValue={value}
+        style={{ width: '100%' }}
+        >
+            <Space direction="vertical">
+                <Checkbox value={Roles.ADMIN}>Admin</Checkbox>
+                <Checkbox value={Roles.MODERATOR}>Moderator</Checkbox>
+                <Checkbox value={Roles.USER}>User</Checkbox>
+            </Space>
+            <Button onClick={() => handleUpdateUsersRightsModalWindow(record)}>Применить</Button>
+        </Checkbox.Group>)
     }
 
     const columnsUserTable: TableColumnsType<User> = [
@@ -259,7 +277,7 @@ const AdminPage = () => {
                 </Space>
             )
         },
-    ];
+    ]
 
     const radioGroup = (
         <Radio.Group
@@ -278,25 +296,9 @@ const AdminPage = () => {
         </Radio.Group>
     );
 
-    const checkboxGroup = (value: Roles[], record: User) => {
-        return(
-        <Checkbox.Group
-        onChange={(e) => {
-            handleChangeUsersRights(e)
-        }}
-        defaultValue={value}
-        style={{ width: '100%' }}
-        >
-            <Space direction="vertical">
-                <Checkbox value={Roles.ADMIN}>Admin</Checkbox>
-                <Checkbox value={Roles.MODERATOR}>Moderator</Checkbox>
-                <Checkbox value={Roles.USER}>User</Checkbox>
-            </Space>
-            <Button onClick={() => handleUpdateUsersRightsModalWindow(record)}>Применить</Button>
-        </Checkbox.Group>)
-    };
+    
 
-    const getUsersProfile = useCallback( async(params: UserFilters = {}) => {
+    const getUsersProfile = useCallback( async(params: UserFilters = {}): Promise <void> => {
         const userTableFilters: UserFilters = {
             search: params.search,
             sortBy: params.sortBy,

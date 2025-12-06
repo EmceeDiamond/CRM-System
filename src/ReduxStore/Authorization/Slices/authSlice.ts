@@ -18,7 +18,6 @@ const authSlice = createSlice({
 
         initializingAuth: (state) => {
             state.isAuthenticatedStatus = isAuthenticatedStatus.initializing
-            console.log("init")
         }
     },
 });

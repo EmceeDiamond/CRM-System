@@ -15,7 +15,7 @@ const getUsersByAdmin = async (filter: UserFilters): Promise <MetaResponseUser<U
                 page: filter.page
             }
         })
-        const data: Promise <MetaResponseUser<User>> = await response.data;
+        const data: MetaResponseUser<User> = await response.data;
         return data;
         
     }
@@ -32,7 +32,7 @@ const getUserProfileByAdmin = async (id: number): Promise <User> => {
             method: 'GET',
 
         })
-        const data: Promise <User> = await response.data;
+        const data: User = await response.data;
         return data;
         
     }
@@ -49,8 +49,7 @@ const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserReq
             method: 'PUT',
             data: userChangeableData
         })
-        const data: Promise <MetaResponseUser<User>> = await response.data;
-        console.log(response.status, response.data)
+        const data: MetaResponseUser<User> = await response.data;
         return data;
         
     }
@@ -60,7 +59,7 @@ const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserReq
     }
 }
 
-const deleteUserByAdmin = async (id: number) => {
+const deleteUserByAdmin = async (id: number): Promise <void> => {
     try {
         await instanceAuth({
             url: `admin/users/${id}`,
@@ -73,13 +72,12 @@ const deleteUserByAdmin = async (id: number) => {
     }
 }
 
-const blockUserByAdmin = async (id: number) => {
+const blockUserByAdmin = async (id: number): Promise <void> => {
     try {
-        const response = await instanceAuth({
+        await instanceAuth({
             url: `admin/users/${id}/block`,
             method: 'POST',
         })
-        console.log(response.status, response.data)
     }
     catch (err){
         console.error('Failed Get Request');
@@ -94,8 +92,7 @@ const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Pro
             method: 'POST',
             data: role
         })
-        const data: Promise <MetaResponseUser<User>> = await response.data;
-        console.log(response.status, response.data)
+        const data: MetaResponseUser<User> = await response.data;
         return data;
     }
     catch (err){
@@ -110,8 +107,7 @@ const unblockUserByAdmin = async (id: number): Promise <MetaResponseUser<User>> 
             url: `admin/users/${id}/unblock`,
             method: 'POST',
         })
-        console.log(response.status)
-        const data: Promise <MetaResponseUser<User>> = await response.data;
+        const data: MetaResponseUser<User> = await response.data;
         return data;
         
     }

@@ -1,7 +1,8 @@
 import { instanceAuth, instance } from "./apiInstance"
-import { PropsDataNewUser, PropsDataUser } from "../Types/types"
+import { PropsDataNewUser, PropsDataUser, Token, User } from "../Types/types"
+//import { tokenManager } from "../shared/AccessToken"
 
-const registerNewUser = async (dataNewUser: PropsDataNewUser) => {
+const registerNewUser = async (dataNewUser: PropsDataNewUser): Promise <User> => {
     try {
         const response = await instance({
             url: 'auth/signup',
@@ -16,7 +17,7 @@ const registerNewUser = async (dataNewUser: PropsDataNewUser) => {
     }
 }
 
-const authenticateUser = async (dataUser: PropsDataUser) => {
+const authenticateUser = async (dataUser: PropsDataUser): Promise <Token> => {
     try {
         const response = await instance({
             url: 'auth/signin',
@@ -31,7 +32,7 @@ const authenticateUser = async (dataUser: PropsDataUser) => {
     }
 }
 
-const logoutUser = async () => {
+const logoutUser = async (): Promise <void> => {
     try {
         const response = await instanceAuth({
             url: 'user/logout',
@@ -46,7 +47,7 @@ const logoutUser = async () => {
     }
 }
 
-const refreshToken = async (refresh: string) => {
+const refreshToken = async (refresh: string): Promise <Token> => {
     try {
         const response = await instance({
             url: 'auth/refresh',
@@ -61,16 +62,13 @@ const refreshToken = async (refresh: string) => {
     }
 }
 
-const getUserProfile = async () => {
+const getUserProfile = async (): Promise <User> => {
     try {
         const response = await instanceAuth({
             url: 'user/profile',
             method: 'GET'
         })
-        if (response){
-            return response.data
-        }
-        
+        return response.data
     }
     catch (err){
         console.error('Failed Get Request');

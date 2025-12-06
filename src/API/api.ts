@@ -10,7 +10,7 @@ const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, To
             },
             method: 'GET'
         })
-        const data: Promise <MetaResponse<Todo, TodoInfo>> = await response.data;
+        const data: MetaResponse<Todo, TodoInfo> = await response.data;
         return data;
     }
     catch(err) {
@@ -20,7 +20,7 @@ const getTodosData = async(filter: FilterStatus): Promise <MetaResponse<Todo, To
     
 }
 
-const addNewTodo = async (title: string) => {
+const addNewTodo = async (title: string): Promise <void> => {
     const postData = {
         isDone: false,
         title: title
@@ -40,7 +40,7 @@ const addNewTodo = async (title: string) => {
     }
 }
 
-const deleteTodo = async (id: number)=> {
+const deleteTodo = async (id: number): Promise <void> => {
     try {
         await instance({
             url: `/todos/${id}`,
@@ -52,7 +52,7 @@ const deleteTodo = async (id: number)=> {
     }
 }
 
-const changeTodo = async (todo: TodoRequest) => {
+const changeTodo = async (todo: TodoRequest): Promise <void> => {
     try {
         await instance({
             url: `todos/${todo.id}`,

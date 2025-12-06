@@ -17,12 +17,12 @@ const RegistrationPage = () => {
 
     const [modalActive, setModalActive] = useState<boolean>(false);
     
-    const handleTransitionOnAuthorizationPage = () => {
+    const handleTransitionOnAuthorizationPage = (): void => {
         navigate('/auth/login')
         setModalActive(false)
     }
 
-    const handleRegistrationNewUser = async (values: NewUser) => {
+    const handleRegistrationNewUser = async (values: NewUser): Promise <void> => {
         try {
             const resultRegistration = await registerNewUser(values)
 

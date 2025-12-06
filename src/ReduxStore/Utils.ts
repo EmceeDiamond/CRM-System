@@ -12,7 +12,7 @@ export const addAsyncBuilderCases = <TState, TResult, TArgs, TReject>(
     builder: ActionReducerMapBuilder<TState>,
     sliceMethod: AsyncThunk<TResult, TArgs, { rejectValue: TReject }>,
     key: keyof TState
-    ) => {
+    ): void => {
     builder.addCase(sliceMethod.pending, (state: Draft<TState>) => {
         const stateSlice = state[key as keyof Draft<TState>] as Draft<IAsyncParticle<unknown>>;
         stateSlice.status = 'pending';
@@ -22,7 +22,6 @@ export const addAsyncBuilderCases = <TState, TResult, TArgs, TReject>(
         stateSlice.status = 'fulfilled';
         stateSlice.errorCounter = 0;
         stateSlice.data = action.payload;
-        console.log(stateSlice.data)
     });
     builder.addCase(sliceMethod.rejected, (state: Draft<TState>, action) => {
         const stateSlice = state[key as keyof Draft<TState>] as Draft<IAsyncParticle<unknown>>;

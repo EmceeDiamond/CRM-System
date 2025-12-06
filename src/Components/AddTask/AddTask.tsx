@@ -15,7 +15,7 @@ const AddTask = () => {
 
     const dispath: AppDispatch = useDispatch();
 
-    const handleAddTask = async () => {
+    const handleAddTask = async (): Promise <void> => {
 
         const inputValue = form.getFieldValue('task')
 

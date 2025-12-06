@@ -2,7 +2,7 @@ import { Button, Flex, Form, Input, Typography, Image, notification } from "antd
 import logoImage from '../../Components/img/ImageOverForm.svg';
 import style from './AuthorizationPage.module.css';
 import { useNavigate } from "react-router-dom";
-import { authenticateUser, getUserProfile } from "../../API/userApi";
+import { authenticateUser } from "../../API/userApi";
 import { tokenManager } from "../../shared/AccessToken";
 import { Token, dataAuthenticateUser } from "../../Types/types";
 import { useDispatch } from "react-redux";
@@ -19,12 +19,11 @@ const AuthorizationPage = () => {
     const [form] = Form.useForm();
     const [errorAlert, contextHolder] = notification.useNotification();
 
-    const handleCreateAccount = () => {
+    const handleCreateAccount = (): void => {
         navigate('/auth/registration')
     }
 
-    const handleAuthorizationAccount = async (values: dataAuthenticateUser) => {
-
+    const handleAuthorizationAccount = async (values: dataAuthenticateUser): Promise <void> => {
         try {
             const tokens: Token = await authenticateUser(values)
 
@@ -32,7 +31,6 @@ const AuthorizationPage = () => {
                 tokenManager.setAccessToken(tokens.accessToken)
                 localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken.toString())
                 dispatch(toggleAuthenticated(true))
-                await getUserProfile();
                 navigate('/main')
             }
             else {
@@ -56,8 +54,10 @@ const AuthorizationPage = () => {
                     duration: 7
                 });
             }
+        } finally {
+            form.resetFields()
         }
-        form.resetFields()
+        
     }
 
     return (
@@ -85,7 +85,7 @@ const AuthorizationPage = () => {
                 <Form.Item
                     name="login"
                     label={<Title level={5} className={style.labelInputFields}>Login</Title>}>
-                    <Input type="e-mail" placeholder="mail@abc.com"/>
+                    <Input type="text" placeholder="mail@abc.com"/>
                 </Form.Item>
                 <Form.Item
                     name="password"

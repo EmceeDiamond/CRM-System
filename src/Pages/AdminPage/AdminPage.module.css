@@ -9,11 +9,7 @@
     height: 40px;
 }
 
-.adminPage__search_btn {
-    height: 40px;
-}
-
-.adminPage__filter_btn {
+.adminPage__search_btn, .adminPage__filter_btn {
     height: 40px;
 }
 
@@ -26,14 +22,14 @@
 
 .errMessageForUsers__title {
     font-weight: 700;
-    font-size: 36;
+    font-size: 36px;
     color: rgb(82, 82, 82);
     margin: 0
 }
 
 .errMessageForUsers__paragraph {
     font-weight: 400;
-    font-size: 16;
+    font-size: 16px;
     color: rgb(82, 82, 82);
 }
 

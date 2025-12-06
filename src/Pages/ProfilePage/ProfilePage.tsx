@@ -1,4 +1,4 @@
-import { Button, Flex, Form } from 'antd';
+import { Button, Descriptions, Flex } from 'antd';
 import { getUserProfile, logoutUser } from '../../API/userApi';
 import { useEffect, useState } from 'react';
 import { isAuthenticatedStatus, Profile } from '../../Types/types';
@@ -10,7 +10,7 @@ import { RootState } from '../../ReduxStore/store';
 import { tokenManager } from '../../shared/AccessToken';
 import { useNavigate } from 'react-router-dom';
 
-function ProfilePage() {
+const ProfilePage = () => {
 
     const [userProfileData, setUserProfileData] = useState<Profile>();
 
@@ -21,7 +21,7 @@ function ProfilePage() {
 
     useEffect(() => {
         
-        const getUserProfileData = async () => {
+        const getUserProfileData = async (): Promise <void> => {
 
             try {
                 const data = await getUserProfile();
@@ -40,41 +40,46 @@ function ProfilePage() {
                         if (successRefreshToken) {
                             getUserProfileData();
                         }
+                        else {
+                            navigate('/auth/login')
+                        }
                     }
                     
                 }
             }
         }
         getUserProfileData()
-    }, [dispatch, selector.isAuthenticatedStatus])
+    }, [dispatch, selector.isAuthenticatedStatus, navigate])
 
-    const handlelogoutUser = async () => {
+    const handlelogoutUser = async (): Promise <void> => {
         await logoutUser();
-        await navigate('./auth/login');
-        
         tokenManager.clearAccessToken();
         localStorage.removeItem('refreshKey')
         dispatch(logout())
+        navigate('./auth/login');
     }
 
     return (
         <Flex 
             justify='space-between'
             className={style.profilePage}>
-            <Form>
-                <Form.Item
+            <Descriptions  
+            layout='horizontal'
+            column={1}>
+                <Descriptions.Item
+                className={style.userData}
                 label='Username'>
                     {userProfileData?.username}
-                </Form.Item>
-                <Form.Item
+                </Descriptions.Item>
+                <Descriptions.Item
                 label='Email'>
                     {userProfileData?.email}
-                </Form.Item>
-                <Form.Item
+                </Descriptions.Item>
+                <Descriptions.Item
                 label='Phone Number'>
                     {userProfileData?.phoneNumber === undefined ? "-" : userProfileData?.phoneNumber}
-                </Form.Item>
-            </Form>
+                </Descriptions.Item>
+            </Descriptions>
             <Button 
                 type="text"
                 onClick={handlelogoutUser}>Logout
