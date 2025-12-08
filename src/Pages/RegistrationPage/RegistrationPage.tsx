@@ -4,7 +4,7 @@ import style from './RegistrationPage.module.css'
 import { registerNewUser } from "../../API/userApi";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { NewUser } from "../../Types/Interfase.js";
+import { NewUser } from "../../Types/types.js";
 
 const {Title, Paragraph, Text} = Typography
 
@@ -17,12 +17,12 @@ const RegistrationPage = () => {
 
     const [modalActive, setModalActive] = useState<boolean>(false);
     
-    const handleTransitionOnAuthorizationPage = () => {
+    const handleTransitionOnAuthorizationPage = (): void => {
         navigate('/auth/login')
         setModalActive(false)
     }
 
-    const handleRegistrationNewUser = async (values: NewUser) => {
+    const handleRegistrationNewUser = async (values: NewUser): Promise <void> => {
         try {
             const resultRegistration = await registerNewUser(values)
 

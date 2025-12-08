@@ -15,7 +15,7 @@ const AddTask = () => {
 
     const dispath: AppDispatch = useDispatch();
 
-    const handleAddTask = async () => {
+    const handleAddTask = async (): Promise <void> => {
 
         const inputValue = form.getFieldValue('task')
 
@@ -23,8 +23,7 @@ const AddTask = () => {
             await addNewTodo(inputValue)
             dispath(getTaskList(storeSelector.taskStatus))
         }
-        catch(err) {
-            console.error(err)
+        catch {
             error.info({
                 message: "Ошибка!",
                 description: "Ошибка при добавлении новой задачи, попробуйте снова",

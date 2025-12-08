@@ -1,3 +1,10 @@
 .sider {
     background-color: rgb(255, 255, 255);
+    min-width: 150px;
+    position: fixed;
+    height: 100dvh;
+}
+
+.navigationMenu {
+    padding-top: 20px;
 }

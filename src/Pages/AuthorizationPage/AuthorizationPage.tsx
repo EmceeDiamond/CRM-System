@@ -4,7 +4,7 @@ import style from './AuthorizationPage.module.css';
 import { useNavigate } from "react-router-dom";
 import { authenticateUser } from "../../API/userApi";
 import { tokenManager } from "../../shared/AccessToken";
-import { Token, dataAuthenticateUser } from "../../Types/Interfase";
+import { Token, dataAuthenticateUser } from "../../Types/types";
 import { useDispatch } from "react-redux";
 import { toggleAuthenticated } from "../../ReduxStore/Authorization/Slices/authSlice";
 import { REFRESH_TOKEN_KEY } from "../../Components/RefreshToken";
@@ -19,12 +19,11 @@ const AuthorizationPage = () => {
     const [form] = Form.useForm();
     const [errorAlert, contextHolder] = notification.useNotification();
 
-    const handleCreateAccount = () => {
+    const handleCreateAccount = (): void => {
         navigate('/auth/registration')
     }
 
-    const handleAuthorizationAccount = async (values: dataAuthenticateUser) => {
-
+    const handleAuthorizationAccount = async (values: dataAuthenticateUser): Promise <void> => {
         try {
             const tokens: Token = await authenticateUser(values)
 
@@ -55,10 +54,10 @@ const AuthorizationPage = () => {
                     duration: 7
                 });
             }
-            
-            console.error(err)
+        } finally {
+            form.resetFields()
         }
-        form.resetFields()
+        
     }
 
     return (
@@ -86,7 +85,7 @@ const AuthorizationPage = () => {
                 <Form.Item
                     name="login"
                     label={<Title level={5} className={style.labelInputFields}>Login</Title>}>
-                    <Input type="e-mail" placeholder="mail@abc.com"/>
+                    <Input type="text" placeholder="mail@abc.com"/>
                 </Form.Item>
                 <Form.Item
                     name="password"

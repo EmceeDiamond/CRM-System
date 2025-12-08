@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../ReduxStore/store';
-import { isAuthenticatedStatus } from '../Types/Interfase';
+import { isAuthenticatedStatus } from '../Types/types';
 
 const PrivateRoute: React.FC = () => {
 

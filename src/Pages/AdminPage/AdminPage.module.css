@@ -1,0 +1,42 @@
+.adminPage {
+    padding-top: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.adminPage__input {
+    width: 300px;
+    height: 40px;
+}
+
+.adminPage__search_btn, .adminPage__filter_btn {
+    height: 40px;
+}
+
+.errMessageForUsers {
+    width: 100%;
+    padding-top: 20px;
+    height: 100vh;
+    align-items: center;
+}
+
+.errMessageForUsers__title {
+    font-weight: 700;
+    font-size: 36px;
+    color: rgb(82, 82, 82);
+    margin: 0
+}
+
+.errMessageForUsers__paragraph {
+    font-weight: 400;
+    font-size: 16px;
+    color: rgb(82, 82, 82);
+}
+
+.isBlockedUser_txt {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

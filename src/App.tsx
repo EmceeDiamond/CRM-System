@@ -8,6 +8,8 @@ import RegistrationPage from './Pages/RegistrationPage/RegistrationPage.tsx';
 import PrivateRoute from './Components/PrivateRoute.tsx';
 import { refreshAccessToken } from './Components/RefreshToken.ts';
 import { useDispatch } from 'react-redux';
+import AdminPage from './Pages/AdminPage/AdminPage.tsx';
+import UserProfilePage from './Pages/UserProfilePage/UserProfilePage.tsx';
 
 export const AppRoutes = () => {
 
@@ -22,6 +24,8 @@ export const AppRoutes = () => {
                     <Route path="/" element={<LayoutMainComponent />}>
                         <Route path='profile' element={<ProfilePage />}/>
                         <Route path="main" element={<TodoListPage />}/>
+                        <Route path='admin' element={<AdminPage />} />
+                        <Route path='admin/profile/:userId' element={<UserProfilePage  />} />
                     </Route>
                 </Route>
 
