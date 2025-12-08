@@ -1,7 +1,7 @@
 import { Flex, Table, TableColumnsType, Space, Button, Modal, TableProps, Form, Input, Radio, Popover, Typography, Checkbox } from "antd"
 import { PaginationData, Roles, User, UserFilters, UserRolesRequest } from "../../Types/types";
 import { JSX, useCallback, useEffect, useState } from "react";
-import { blockUserByAdmin, deleteUserByAdmin, getUsersByAdmin, unblockUserByAdmin, updateUsersRightsByAdmin } from "../../API/adminApi";
+import { blockUser, deleteUser, getUsersList, unblockUser, updateUserRights } from "../../API/adminApi";
 import { ArrowRightOutlined, DeleteOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons'
 import style from './AdminPage.module.css'
 import { refreshAccessToken } from "../../Components/RefreshToken";
@@ -31,7 +31,7 @@ const AdminPage = () => {
     const handleDeleteUser = async(id: number): Promise <void> => {
 
         try {
-            await deleteUserByAdmin(id)
+            await deleteUser(id)
             getUsersProfile(parametrsGetRequest)
         }
         catch(err) {
@@ -52,9 +52,6 @@ const AdminPage = () => {
             cancelText: 'Нет',
             onOk(){
                 handleDeleteUser(user.id)
-            },
-            onCancel() {
-                console.log('Cancel')
             }
         });
     }
@@ -64,11 +61,11 @@ const AdminPage = () => {
     }
 
     const handleSortTable: TableProps<User>['onChange'] = (  
-        _pagination,
+        pagination,
         _filters,
         sorter) => {
 
-        if (_pagination.current === pagination.current && _pagination.pageSize === pagination.pageSize) {
+        if (pagination.current === pagination.current && pagination.pageSize === pagination.pageSize) {
             if (!Array.isArray(sorter)){
                 getUsersProfile({
                     sortBy: String(sorter.column?.dataIndex),
@@ -84,17 +81,17 @@ const AdminPage = () => {
 
         else {
             getUsersProfile({
-                page: Number(_pagination.current) - 1
+                page: Number(pagination.current) - 1
             })
 
             setParametrsGetRequest(state => ({
                 ...state,
-                page: Number(_pagination.current) - 1
+                page: Number(pagination.current) - 1
             }))
 
             setPagination(state => ({
                 ...state,
-                current: Number(_pagination.current)
+                current: Number(pagination.current)
             }))
         }
     }  
@@ -136,9 +133,6 @@ const AdminPage = () => {
                 else {
                     handleBlockUser(user.id)
                 }
-            },
-            onCancel() {
-                console.log('Cancel')
             }
         });
         
@@ -146,7 +140,7 @@ const AdminPage = () => {
 
     const handleBlockUser = async(userId: number): Promise <void> => {
         try {
-            await blockUserByAdmin(userId)
+            await blockUser(userId)
             getUsersProfile(parametrsGetRequest)
         } 
         catch(err) {
@@ -160,7 +154,7 @@ const AdminPage = () => {
 
     const handleUnblockUser = async(userId: number): Promise <void> => {
         try {
-            await unblockUserByAdmin(userId)
+            await unblockUser(userId)
             getUsersProfile(parametrsGetRequest)
         } 
         catch(err) {
@@ -185,20 +179,17 @@ const AdminPage = () => {
             okType: 'danger',
             cancelText: 'Нет',
             onOk(){
-                handleUpdateUsersRights(user.id)
-            },
-            onCancel() {
-                console.log('Cancel')
+                handleUpdateUserRights(user.id)
             }
         });
     }
 
-    const handleUpdateUsersRights = async(userId: number): Promise <void> => {
+    const handleUpdateUserRights = async(userId: number): Promise <void> => {
         const userRequsetRights: UserRolesRequest = {
             roles: usersRigths
         }
         try {
-            await updateUsersRightsByAdmin(userId, userRequsetRights)
+            await updateUserRights(userId, userRequsetRights)
             getUsersProfile(parametrsGetRequest)
         }
         catch(err) {
@@ -282,7 +273,6 @@ const AdminPage = () => {
     const radioGroup = (
         <Radio.Group
         onChange={(e) => {
-            console.log(e.target.value)
             handleFilterUsers(e.target.value)
         }}
         defaultValue={'all'}
@@ -308,7 +298,7 @@ const AdminPage = () => {
             page: params.page
         }
         try {
-            const dataUsers = await getUsersByAdmin(userTableFilters);
+            const dataUsers = await getUsersList(userTableFilters);
             setDataUsersProfile(dataUsers.data)
             setPagination(state => ({
                 ...state,

@@ -1,7 +1,7 @@
 import { instanceAuth } from "./apiInstance";
 import { MetaResponseUser, User, UserFilters, UserRequest, UserRolesRequest } from "../Types/types";
 
-const getUsersByAdmin = async (filter: UserFilters): Promise <MetaResponseUser<User>> => {
+const getUsersList = async (filter: UserFilters): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
             url: 'admin/users',
@@ -25,7 +25,7 @@ const getUsersByAdmin = async (filter: UserFilters): Promise <MetaResponseUser<U
     }
 }
 
-const getUserProfileByAdmin = async (id: number): Promise <User> => {
+const getUserData = async (id: number): Promise <User> => {
     try {
         const response = await instanceAuth({
             url: `admin/users/${id}`,
@@ -42,7 +42,7 @@ const getUserProfileByAdmin = async (id: number): Promise <User> => {
     }
 }
 
-const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserRequest): Promise <MetaResponseUser<User>> => {
+const updateUserData = async (id: number, userChangeableData: UserRequest): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
             url: `admin/users/${id}`,
@@ -59,7 +59,7 @@ const updateUsersProfileByAdmin = async (id: number, userChangeableData: UserReq
     }
 }
 
-const deleteUserByAdmin = async (id: number): Promise <void> => {
+const deleteUser = async (id: number): Promise <void> => {
     try {
         await instanceAuth({
             url: `admin/users/${id}`,
@@ -72,7 +72,7 @@ const deleteUserByAdmin = async (id: number): Promise <void> => {
     }
 }
 
-const blockUserByAdmin = async (id: number): Promise <void> => {
+const blockUser = async (id: number): Promise <void> => {
     try {
         await instanceAuth({
             url: `admin/users/${id}/block`,
@@ -85,7 +85,7 @@ const blockUserByAdmin = async (id: number): Promise <void> => {
     }
 }
 
-const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Promise <MetaResponseUser<User>> => {
+const updateUserRights = async (id: number, role: UserRolesRequest): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
             url: `admin/users/${id}/rights`,
@@ -101,7 +101,7 @@ const updateUsersRightsByAdmin = async (id: number, role: UserRolesRequest): Pro
     }
 }
 
-const unblockUserByAdmin = async (id: number): Promise <MetaResponseUser<User>> => {
+const unblockUser = async (id: number): Promise <MetaResponseUser<User>> => {
     try {
         const response = await instanceAuth({
             url: `admin/users/${id}/unblock`,
@@ -117,4 +117,4 @@ const unblockUserByAdmin = async (id: number): Promise <MetaResponseUser<User>> 
     }
 }
 
-export { getUsersByAdmin, getUserProfileByAdmin, updateUsersProfileByAdmin, deleteUserByAdmin, blockUserByAdmin, updateUsersRightsByAdmin, unblockUserByAdmin }
+export { getUsersList, getUserData, updateUserData, deleteUser, blockUser, updateUserRights, unblockUser }

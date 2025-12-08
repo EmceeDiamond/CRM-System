@@ -1,5 +1,5 @@
 import { Button, Descriptions, Flex } from 'antd';
-import { getUserProfile, logoutUser } from '../../API/userApi';
+import { getProfile, logoutUser } from '../../API/userApi';
 import { useEffect, useState } from 'react';
 import { isAuthenticatedStatus, Profile } from '../../Types/types';
 import style from './ProfilePage.module.css'
@@ -24,7 +24,7 @@ const ProfilePage = () => {
         const getUserProfileData = async (): Promise <void> => {
 
             try {
-                const data = await getUserProfile();
+                const data = await getProfile();
                 if (data) {
                     setUserProfileData(data)
                 }

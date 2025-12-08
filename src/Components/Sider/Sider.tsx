@@ -1,25 +1,23 @@
 import { Layout, Menu } from 'antd';
 import MenuItem from "antd/es/menu/MenuItem";
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import style from './Sider.module.css';
 
 const {Sider} = Layout;
 
 const SiderComponent = () => {
-
-    const navigate = useNavigate();
         
     return (
         <Sider className={style.sider}>
             <Menu className={style.navigationMenu}>
                 <MenuItem>
-                    <span onClick={() => navigate('./main')}>Список задач</span>
+                    <NavLink to={'./main'}>Список задач</NavLink>
                 </MenuItem>
                 <MenuItem>
-                    <span onClick={() => navigate('./profile')}>Личный кабинет</span>
+                    <NavLink to={'./profile'}>Личный кабинет</NavLink>
                 </MenuItem>
                 <MenuItem>
-                    <span onClick={() => navigate('./admin')}>Пользователи</span>
+                    <NavLink to={'./admin'}>Пользователи</NavLink>
                 </MenuItem>
             </Menu>
         </Sider>

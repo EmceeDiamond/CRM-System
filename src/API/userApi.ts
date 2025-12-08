@@ -62,7 +62,7 @@ const refreshToken = async (refresh: string): Promise <Token> => {
     }
 }
 
-const getUserProfile = async (): Promise <User> => {
+const getProfile = async (): Promise <User> => {
     try {
         const response = await instanceAuth({
             url: 'user/profile',
@@ -76,4 +76,4 @@ const getUserProfile = async (): Promise <User> => {
     }
 }
 
-export {registerNewUser, authenticateUser, logoutUser, refreshToken, getUserProfile }
+export {registerNewUser, authenticateUser, logoutUser, refreshToken, getProfile }

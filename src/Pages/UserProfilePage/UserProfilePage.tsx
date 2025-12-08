@@ -1,32 +1,32 @@
 import { Button, Flex, Form, Input, notification, Typography, Descriptions } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserProfileByAdmin } from '../../API/adminApi';
+import { getUserData } from '../../API/adminApi';
 import { User } from '../../Types/types';
 import { useDispatch } from 'react-redux';
-import { updateUsersProfileByAdmin } from '../../API/adminApi';
+import { updateUserData } from '../../API/adminApi';
 import style from './UserProfilePage.module.css'
 import { UserRequest } from '../../Types/types';
 import { refreshAccessToken } from '../../Components/RefreshToken';
 
 const {Title, Paragraph} = Typography;
 
-function UserProfilePage() {
+const UserProfilePage = () => {
 
     const { userId } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [errorAlert, contextHolder] = notification.useNotification();
 
-    const [userProfileData, setUserProfileData] = useState<User>();
+    const [originalUserData, setOriginalUserData] = useState<User>();
     const [editingMode, setEditingMode] = useState<boolean>(false);
     const [accessRights, setAccessRights] = useState<boolean>(true);
 
     const getUserProfileData =  useCallback(async(): Promise <void> => {
         try {
-            const data = await getUserProfileByAdmin(Number(userId));
+            const data = await getUserData(Number(userId));
             if (data) {
-                setUserProfileData(data)
+                setOriginalUserData(data)
             }
         }
         catch(err) {
@@ -65,36 +65,60 @@ function UserProfilePage() {
     }
 
     const handleSaveChangeUserData = async(values: UserRequest): Promise <void> => {
-        try {
-            await updateUsersProfileByAdmin(Number(userId), values) 
-            await getUserProfileData()
+        
+        if (originalUserData) {
+
+            const changesValue = getChangedFields(originalUserData, values)
+            
+            if (Object.keys(changesValue).length === 0) {
+                return;
+            }
+
+            try {
+                await updateUserData(Number(userId), changesValue) 
+                await getUserProfileData()
+            }
+            catch(err) {
+                const error = err as {status: number} 
+
+                if (error.status === 401){ 
+                    refreshAccessToken(dispatch)
+                }
+
+                if (error.status === 400){ 
+                    errorAlert.info({
+                        message: "Ошибка!",
+                        description: "Новый Логин или Email уже занят",
+                        placement: "topRight",
+                        duration: 7
+                    });
+                }
+
+                if (error.status === 403){ 
+                    errorAlert.info({
+                        message: "Ошибка!",
+                        description: "Недостаточно прав для изменения данных пользователей",
+                        placement: "topRight",
+                        duration: 7
+                    });
+                }
+            }
+            finally {
+                setEditingMode(false)
+            }
         }
-        catch(err) {
-            const error = err as {status: number} 
+    }
 
-            if (error.status === 401){ 
-                refreshAccessToken(dispatch)
-            }
+    const getChangedFields = <T extends object> (  oldData: T, newData: T): Partial<T> => {
+        const changed: Partial<T> = {};
 
-            if (error.status === 400){ 
-                errorAlert.info({
-                    message: "Ошибка!",
-                    description: "Новый Логин или Email уже занят",
-                    placement: "topRight",
-                    duration: 7
-                });
-            }
-
-            if (error.status === 403){ 
-                errorAlert.info({
-                    message: "Ошибка!",
-                    description: "Недостаточно прав для изменения данных пользователей",
-                    placement: "topRight",
-                    duration: 7
-                });
+        for (const key of Object.keys(newData) as Array<keyof T>) {
+            if (Object.hasOwn(newData, key) && oldData[key] !== newData[key]) {
+                changed[key] = newData[key];
             }
         }
-        setEditingMode(false)
+
+        return changed;
     }
 
     return (
@@ -113,21 +137,21 @@ function UserProfilePage() {
                         name='username'
                         label='Username'>
                             <Input
-                            defaultValue={userProfileData?.username}
+                            defaultValue={originalUserData?.username}
                             />
                         </Form.Item>
                         <Form.Item
                         name='email'
                         label='Email'>
                             <Input 
-                            defaultValue={userProfileData?.email}
+                            defaultValue={originalUserData?.email}
                             />
                         </Form.Item>
                         <Form.Item
                         name='phoneNumber'
                         label='Phone Number'>
                             <Input 
-                            defaultValue={userProfileData?.phoneNumber}
+                            defaultValue={originalUserData?.phoneNumber}
                             />
                         </Form.Item>
                         <Flex gap={30}>
@@ -149,15 +173,15 @@ function UserProfilePage() {
                     <Descriptions>
                         <Descriptions.Item
                         label='Username'>
-                            {userProfileData?.username}
+                            {originalUserData?.username}
                         </Descriptions.Item>
                         <Descriptions.Item
                         label='Email'>
-                            {userProfileData?.email}
+                            {originalUserData?.email}
                         </Descriptions.Item>
                         <Descriptions.Item
                         label='Phone Number'>
-                            {userProfileData?.phoneNumber === undefined ? "-" : userProfileData?.phoneNumber}
+                            {originalUserData?.phoneNumber === undefined ? "-" : originalUserData?.phoneNumber}
                         </Descriptions.Item>
                         <Descriptions.Item>
                             <Button htmlType='submit' onClick={handleStartEditingMode}>Редактировать</Button>

@@ -99,7 +99,6 @@ const Task = (props: Props) => {
                         onReset={handleUndoChanges}
                         id="editingMode__form"
                         onFinish={handleSaveChanges}
-                        onFinishFailed={() => console.log("asd")}
                         form={form}
                     >
                         <Flex className={styles.editingMode__txt}>
